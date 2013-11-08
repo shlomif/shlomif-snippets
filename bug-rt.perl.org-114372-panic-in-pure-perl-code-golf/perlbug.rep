@@ -1,0 +1,134 @@
+Subject: Panic in pure-Perl code with vanilla perl-5.16.0 from perlbrew
+Message-Id: <5.16.0_12697_1343837660@telaviv1.shlomifish.org>
+Reply-To: shlomif@iglu.org.il
+To: perlbug@perl.org
+From: shlomif@iglu.org.il
+
+
+This is a bug report for perl from shlomif@iglu.org.il,
+generated with the help of perlbug 1.39 running under perl 5.16.0.
+
+
+-----------------------------------------------------------------
+[Please describe your issue here]
+
+This Bash script causes a panic with vanilla perl-5.16.0 (installed
+using perlbrew - without threads) on Mageia Linux 3/Cauldron on x86-64:
+
+<<<<
+#!/bin/bash
+echo -e '[2,36,29,83]\n[30,81,55,15,68,26,71,29,6,46]\n[16,66,42,76,59]\n[65,47,65,47,74,33,41,38,75,59]\n[64,55,39,26,33,66]\n' |
+    perl -pe '@h{@x=sort{$a<=>$b}/\d+/g}=reverse@x;s#\d+#$h{$&}#g'
+>>>>
+
+The code does not make a lot of sense, but it was a starting point for working
+on this Perl Golf challenge:
+
+http://golf.shinh.org/p.rb?MaxMinSwap
+
+When running it I get:
+
+shlomif@telaviv1:~$ bash reproduce.bash
+[,,,]
+[,,,26,,15,,6,29,]
+[,,,,]
+[,33,,33,,47,41,47,,]
+panic: attempt to copy freed scalar 81b2f8 at -e line 1, <> line 5.
+
+Further lines are not processed.
+
+Please look into fixing it.
+
+[Please do not change anything below this line]
+-----------------------------------------------------------------
+---
+Flags:
+    category=core
+    severity=high
+---
+Site configuration information for perl 5.16.0:
+
+Configured by shlomif at Wed Aug  1 11:45:44 IDT 2012.
+
+Summary of my perl5 (revision 5 version 16 subversion 0) configuration:
+
+  Platform:
+    osname=linux, osvers=3.5.0-desktop-1.mga3, archname=x86_64-linux
+    uname='linux telaviv1.shlomifish.org 3.5.0-desktop-1.mga3 #1 smp sat jul 28 00:29:28 utc 2012 x86_64 x86_64 x86_64 gnulinux '
+    config_args='-de -Dprefix=/home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0 -Aeval:scriptdir=/home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/bin'
+    hint=recommended, useposix=true, d_sigaction=define
+    useithreads=undef, usemultiplicity=undef
+    useperlio=define, d_sfio=undef, uselargefiles=define, usesocks=undef
+    use64bitint=define, use64bitall=define, uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='cc', ccflags ='-fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
+    optimize='-O2',
+    cppflags='-fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include'
+    ccversion='', gccversion='4.7.1', gccosandvers=''
+    intsize=4, longsize=8, ptrsize=8, doublesize=8, byteorder=12345678
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=16
+    ivtype='long', ivsize=8, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=8, prototype=define
+  Linker and Libraries:
+    ld='cc', ldflags =' -fstack-protector -L/usr/local/lib'
+    libpth=/usr/local/lib /lib/../lib64 /usr/lib/../lib64 /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib64
+    libs=-lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lc -lgdbm_compat
+    perllibs=-lnsl -ldl -lm -lcrypt -lutil -lc
+    libc=/lib/libc-2.16.so, so=so, useshrplib=false, libperl=libperl.a
+    gnulibc_version='2.16'
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E'
+    cccdlflags='-fPIC', lddlflags='-shared -O2 -L/usr/local/lib -fstack-protector'
+
+Locally applied patches:
+
+
+---
+@INC for perl 5.16.0:
+    /home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.12.2
+    /home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.14.2
+    /home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.16.0
+    /home/shlomif/apps/perl/modules/lib/site_perl/5.12.2
+    /home/shlomif/apps/perl/modules/lib/site_perl/5.14.2
+    /home/shlomif/apps/perl/modules/lib/site_perl/5.16.0
+    /home/shlomif/apps/perl/modules/lib/perl5/5.12.2
+    /home/shlomif/apps/perl/modules/lib/perl5/5.14.2
+    /home/shlomif/apps/perl/modules/lib/perl5/5.16.0
+    /home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/lib/site_perl/5.16.0/x86_64-linux
+    /home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/lib/site_perl/5.16.0
+    /home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/lib/5.16.0/x86_64-linux
+    /home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/lib/5.16.0
+    .
+
+---
+Environment for perl 5.16.0:
+    HOME=/home/shlomif
+    LANG=en_GB.UTF-8
+    LANGUAGE=en_GB:en
+    LC_ADDRESS=en_US.UTF-8
+    LC_COLLATE=en_US.UTF-8
+    LC_CTYPE=en_US.UTF-8
+    LC_IDENTIFICATION=en_GB.UTF-8
+    LC_MEASUREMENT=en_GB.UTF-8
+    LC_MESSAGES=en_US.UTF-8
+    LC_MONETARY=en_US.UTF-8
+    LC_NAME=en_GB.UTF-8
+    LC_NUMERIC=en_GB.UTF-8
+    LC_PAPER=en_US.UTF-8
+    LC_SOURCED=1
+    LC_TELEPHONE=en_US.UTF-8
+    LC_TIME=en_GB.UTF-8
+    LD_LIBRARY_PATH (unset)
+    LOGDIR (unset)
+    PATH=/home/shlomif/apps/perl/perlbrew/bin:/home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/bin:/home/shlomif/apps/apache-maven/apache-maven-2.1.0//bin:/home/shlomif/Download/unpack/graphics/fop/fop-0.93:/home/shlomif/apps/perl/modules/local/bin:/home/shlomif/apps/perl/modules/bin:/home/shlomif/apps/latemp/bin:/home/shlomif/apps/test/quadpres/bin:/home/shlomif/bin:/home/shlomif/apps/apache-maven/apache-maven-2.1.0//bin:/bin:/usr/bin:/usr/games:/usr/lib64/qt4/bin
+    PERL5LIB=/home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.12.2:/home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.14.2:/home/shlomif/apps/perl/modules/lib/perl5/site_perl/5.16.0:/home/shlomif/apps/perl/modules/lib/site_perl/5.12.2:/home/shlomif/apps/perl/modules/lib/site_perl/5.14.2:/home/shlomif/apps/perl/modules/lib/site_perl/5.16.0:/home/shlomif/apps/perl/modules/lib/perl5/5.12.2:/home/shlomif/apps/perl/modules/lib/perl5/5.14.2:/home/shlomif/apps/perl/modules/lib/perl5/5.16.0
+    PERLBREW_MANPATH=/home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/man
+    PERLBREW_PATH=/home/shlomif/apps/perl/perlbrew/bin:/home/shlomif/apps/perl/perlbrew/perls/perl-5.16.0/bin
+    PERLBREW_PERL=perl-5.16.0
+    PERLBREW_ROOT=/home/shlomif/apps/perl/perlbrew
+    PERLBREW_VERSION=0.44
+    PERL_AUTOINSTALL=--skipdeps --alldeps
+    PERL_BADLANG (unset)
+    PERL_MM_USE_DEFAULT=1
+    SHELL=/bin/bash

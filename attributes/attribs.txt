@@ -1,0 +1,39 @@
+1. Catalyst.
+
+    - http://search.cpan.org/dist/Catalyst-Manual/lib/Catalyst/Manual/Intro.pod
+
+2. Class::Std.
+
+    http://search.cpan.org/dist/Class-Std/lib/Class/Std.pm
+    (Called traits there).
+
+    - : ATTR ; for object fields/slots.
+
+    - : PRIVATE
+
+    - : STRINGIFY
+
+    - : NUMERIFY
+
+    - :BOOLIFY
+
+    - :CUMULATIVE
+
+3. Test::Class.
+
+    - http://search.cpan.org/dist/Test-Class/lib/Test/Class.pm
+
+4. Testing Framework:
+
+    sub ok : testfunc { ... }
+    sub is : testfunc { ... ... ok ( ... ) }
+    sub is_deeply : testfunc { ... }
+    sub my_create_and_compare : testfunc : { ... is_deeply(...) }
+
+    Use the topmost testfunc attribute to determine where the context
+    of the caller:
+
+    # Display this line on
+    my_create_and_compare ({ %params }, "Testing");
+    failure.
+
