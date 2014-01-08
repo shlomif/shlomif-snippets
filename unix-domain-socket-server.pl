@@ -4,10 +4,14 @@ use strict;
 use warnings;
 
 use IO::Socket::UNIX;
+use File::Path qw(mkpath);
+
+my $dir = "$ENV{HOME}/tmp/unix-domain-socket-test";
+mkpath($dir);
 
 my $server = IO::Socket::UNIX->new(
     Type => SOCK_STREAM(),
-    Local => "$ENV{HOME}/tmp/unix-domain-socket-test/foo.sock",
+    Local => "$dir/foo.sock",
     Listen => 1,
 );
 
