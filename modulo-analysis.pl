@@ -23,5 +23,19 @@ for my $base (2 .. 101)
         push @results, \%found;
     }
     print "Base $base ", join(";", map { my $x = $_;
-            "[". join(",", map { $_ . " {" . join("|", @{$x->{$_}})  . "} " }sort { $a <=> $b } keys($_)) . "]" } @results), "\n";
+        "[". join(",", map { $_ . " {" . join("|", @{$x->{$_}})  . "} " }sort { $a <=> $b } keys($_)) . "]" } @results), "\n";
+
+    my $found = 0;
+    foreach my $final_m (sort { $a <=> $b } keys(%{$results[0]}))
+    {
+        if (exists($results[1]->{$final_m}))
+        {
+            $found = 1;
+        }
+    }
+
+    if (!$found)
+    {
+        die "For base $base , there are no valid solutions for the two formulas.";
+    }
 }
