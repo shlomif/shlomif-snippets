@@ -1,0 +1,8 @@
+=encoding utf8
+
+=head1 Shlomi Fish’s Random Perl 5 Snippets and Small Programs
+
+This repository contains various small Perl 5 programs and snippets as
+collected by Shlomi Fish (L<http://www.shlomifish.org/> ).
+
+=cut
