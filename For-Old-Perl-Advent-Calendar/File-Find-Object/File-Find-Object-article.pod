@@ -1,0 +1,172 @@
+=head1 File::Find::Object
+
+=head2 The Problem with File::Find
+
+Most perl hackers are familiar with L<File::Find> which is a module
+to scan a nested directory tree recursively and call a callback on each file.
+File::Find has been shipped with the core distribution since 5.000 and works
+pretty well. There are modules on CPAN such as L<File::Find::Rule>
+or L<File::Finder>, that provide higher-level interfaces on top of it.
+
+File::Find however is not without its drawbacks. Among its most serious
+limitations are:
+
+=over 4
+
+=item * It cannot be instantiated
+
+File::Find interface is composed of exported, global functions and global
+variables, that do not give way to instantiation. So for example,
+if you want to perform a find operation inside another one, it won't be
+possible.
+
+=item * It does not provide an iterative interface
+
+File::Find's interface is recursive and calls a callback on each file it finds.
+What would be more desirable is an iterative approach that retrieves one file
+at a time, and can be stopped in the middle. Like this:
+
+    while (my $result = $ff->next())
+    {
+        # Do something with $result
+        .
+        .
+        .
+    }
+
+File::Find does not support it.
+
+=back
+
+=head2 Introducing File::Find::Object
+
+L<File::Find::Object> provides an alternative to File::Find which is
+object-oriented, and lacks both of these deficiencies. It is also very easy
+to use. At construction one supplies it a list of directories to scan which
+it traverses one by one. One retrieves the next result using the C<next()>
+method. Aside from that several traversal-control functions are provided:
+C<set_traverse_to()> controls which files will be scanned from the
+current node onwards. C<prune()> is equivalent to calling
+C<set_traverse_to()> with an empty array reference, and just prunes the
+entire directory and does not descend at all. C<get_traverse_to()> retrieves
+the current value of which sub-items to traverse to, and
+C<get_current_node_file_list()> returns the entire files that are available for
+traversal.
+
+Here's an example, in which we scan all the C<cur> directories inside the
+maildirs under C<~/.Mail/>. We prune them so we won't get bogged down in
+scanning all the files:
+
+    use strict;
+    use warnings;
+
+    use File::Spec;
+    use File::Find::Object;
+
+    sub last_component
+    {
+        my $path = shift;
+        my @comps = File::Spec->splitdir($path);
+        return $comps[-1];
+    }
+
+    my $tree =
+        File::Find::Object->new(
+            {},
+            File::Spec->catdir($ENV{HOME}, ".Mail")
+        );
+
+    my @maildirs;
+    while (my $result = $tree->next())
+    {
+        if (last_component($result) eq "cur")
+        {
+            # Make sure we don't get each and every files in the directory as a
+            # result.
+            $tree->prune();
+            push @maildirs, $result;
+        }
+    }
+
+Later on, we can do something with C<@maildirs> like search them for all
+mails whose "From" header contains "Schwern". Here's the complete example for
+that:
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    use File::Spec;
+    use File::Find::Object;
+    use File::Slurp;
+    use Email::Simple;
+
+    sub last_component
+    {
+        my $path = shift;
+        my @comps = File::Spec->splitdir($path);
+        return $comps[-1];
+    }
+
+    my $tree =
+        File::Find::Object->new(
+            {},
+            File::Spec->catdir($ENV{HOME}, ".Mail")
+        );
+
+    my @maildirs;
+    while (my $result = $tree->next())
+    {
+        if (last_component($result) eq "cur")
+        {
+            # Make sure we don't get each and every files in the directory as a
+            # result.
+            $tree->prune();
+            push @maildirs, $result;
+        }
+    }
+    foreach my $dir (@maildirs)
+    {
+        opendir (my $dir_handle, $dir);
+        my @contents = readdir($dir_handle);
+        closedir($dir_handle);
+
+        foreach my $file (File::Spec->no_upwards(@contents))
+        {
+            my $fullpath = File::Spec->catfile($dir, $file);
+
+            if (! -f $fullpath)
+            {
+                next FILES_LOOP;
+            }
+
+            my $text = read_file($fullpath);
+            my $email = Email::Simple->new($text);
+            my $from = $email->header("From");
+            if (defined($from) && ($from =~ /Schwern/))
+            {
+                print "$fullpath\n";
+            }
+        }
+    }
+
+=head2 Similar Modules
+
+L<File::Find::Iterator> also provides an interface which is capable of
+being instantiated and interrupted, to finding files. However, it is
+implemented using a closure, which is less flexible, and, furthermore, has
+become unmaintained.
+
+Randal L. Schwartz wrote a some code for an iterative directory tree traverser 
+in one of his columns 
+(see L<http://www.stonehenge.com/merlyn/LinuxMag/col30.html,some>). 
+This code is implemented by tying to a hash, and due to the fact it was 
+written for publication, its terms are unclear.
+
+L<File::FTS> is an old attempt at supplying an iterative directory traverser.
+However, its current maintainer abandoned it so he can concentrate on
+enhancing File::Find::Object.
+
+L<File::Walker> is another attempt at making an iterative directory traverser.
+It is incomplete and has been neglected.

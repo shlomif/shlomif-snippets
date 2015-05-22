@@ -1,0 +1,41 @@
+In Vim:
+-------
+
+    :cexpr system('ack --perl map .')
+
+- can be abbreviated to 
+    
+    :cex system('ack --perl map .')
+
+Alternatively:
+
+    :set grepprg=ack
+
+And then:
+
+    :grep [Ack arguments]
+
+Downside: can no longer use the normal grep in the same session.
+
+    :command -nargs=+ -complete=file Ack cexpr system('ack <args>')
+
+And then type:
+
+    :Ack [ack arguments]
+    
+To display the ack results in the quickfix dialog.
+
+Wrong! This does not handle single quotes well.
+
+Add the following to your .vimrc:
+
+<<<<<<<<<
+function! Ack_Search(command)
+    cexpr system("ack " . a:command)
+endfunction
+
+command! -nargs=+ -complete=file Ack call Ack_Search(<q-args>)
+>>>>>>>>>
+
+And then use :Ack
+

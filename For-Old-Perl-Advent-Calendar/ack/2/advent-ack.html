@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>2006 Perl Advent Calendar: "Except that what? No acktthpt that!"</title>
+<link rel="stylesheet" href="../style.css" type="text/css" /></head>
+<body>
+<h1><a href="../">Perl Advent Calendar 2006-12</a>-[[[TODO]]]</h1>
+<h2 align="center">"Except that what? No acktthpt that!"</h2>
+<h3 align="center">by Shlomi Fish</h3>
+
+<p>
+First of all a confession: I spent some time today trying to run the subject
+of this feature from within <a href="http://www.vim.org/">Vim</a>, and so
+decided to write about it here. The reason I was not successful for a long
+time was because of a bug in it that was present in my relatively old version,
+and was fixed since in the CPAN version, so make sure you use the latest
+version too. (Or else - no help for you.)
+</p>
+
+<p>
+<a href="http://petdance.com/ack/">ack</a> is a useful command line utility
+for searching text, primarily intended for scanning trees of code, especially
+such trees that contain code in many different languages. ack command lines 
+tend to be much shorter than the equivalent <tt>grep -r</tt> or <tt>find</tt>
+command lines. ack is written in perl and except for the perl core, requires
+only the <a href="http://search.cpan.org/dist/File-Next/">File::Next</a> 
+module from the CPAN.
+</p>
+
+<h2>Let's start... searching!</h2>
+
+<p>
+Our corpus for this example would be the 
+<a href="http://www.parrotcode.org/">parrot source tree</a> which is as
+heterogenous a source tree as they can get. Use the following command to
+checkout it from its subversion repository:
+</p>
+
+<pre>
+svn co -r 15920 http://svn.perl.org/parrot/trunk
+</pre>
+
+<p>
+(We're specifying a particular revision so we'll get predictable results).
+</p>
+
+<p>
+Now lets' install ack from the CPAN: <tt>perl -MCPAN -e "install
+App::Ack"</tt>. Like I said, make sure you're using the latest version.
+</p>
+
+<p>
+Now we can cd into the parrot trunk and start playing with it.
+
+<pre>
+$ ack 'fprintf.*Bad expr' .
+languages/m4/src/eval.c
+291:      fprintf( stderr, "Bad expression in eval (missing right parenthesis): %s",
+296:      fprintf( stderr, "Bad expression in eval: %s", expr);
+300:      fprintf( stderr, "Bad expression in eval (bad input): %s", expr);
+304:      fprintf( stderr, "Bad expression in eval (excess input): %s", expr);
+</pre>
+
+<p>
+ack accepts a perl regular expression as its first argument. The other
+arguments are path names. We specified "." (the current directory) and as we 
+can see ack recursed into it, which it does by default. The first thing we 
+notice is that its output is in a userfriendly format. However it will use
+a more machine readable grep-like <tt>"${filename}:${line_num}:${line}"</tt> 
+format if it is piped to a program:
+</p>
+
+<pre>
+$ ack 'fprintf.*Bad expr' . | cat
+languages/m4/src/eval.c:291:      fprintf( stderr, "Bad expression in eval (missing right parenthesis): %s",
+languages/m4/src/eval.c:296:      fprintf( stderr, "Bad expression in eval: %s", expr);
+languages/m4/src/eval.c:300:      fprintf( stderr, "Bad expression in eval (bad input): %s", expr);
+languages/m4/src/eval.c:304:      fprintf( stderr, "Bad expression in eval (excess input): %s", expr);
+</pre>
+
+<p>
+This allows it to be used as a droppable grep-replacement by editors and other
+tools. The other thing we notice is that despite the fact that it operated on a
+Subversion working copy, it didn't display results from the copies of the
+files inside the <tt>.svn</tt> directories. This is more than we can say
+for <tt>grep -r</tt>:
+</p>
+
+<pre>
+$ grep -rn 'fprintf.*Bad expr' .
+./languages/m4/src/.svn/text-base/eval.c.svn-base:291:      fprintf( stderr, "Bad expression in eval (missing right parenthesis): %s",
+./languages/m4/src/.svn/text-base/eval.c.svn-base:296:      fprintf( stderr, "Bad expression in eval: %s", expr);
+./languages/m4/src/.svn/text-base/eval.c.svn-base:300:      fprintf( stderr, "Bad expression in eval (bad input): %s", expr);
+./languages/m4/src/.svn/text-base/eval.c.svn-base:304:      fprintf( stderr, "Bad expression in eval (excess input): %s", expr);
+./languages/m4/src/eval.c:291:      fprintf( stderr, "Bad expression in eval (missing right parenthesis): %s",
+./languages/m4/src/eval.c:296:      fprintf( stderr, "Bad expression in eval: %s", expr);
+./languages/m4/src/eval.c:300:      fprintf( stderr, "Bad expression in eval (bad input): %s", expr);
+./languages/m4/src/eval.c:304:      fprintf( stderr, "Bad expression in eval (excess input): %s", expr);
+</pre>
+
+<p>
+(Expecting trouble? Make it <b>double!</b>.)
+</p>
+
+<p>
+ack does not descend into such directories as <tt>.svn</tt>, <tt>blib</tt>,
+<tt>CVS</tt>, because they obscure the results. Now try acheiving the same
+effect with grep:
+</p>
+
+<pre>
+grep -n 'fprintf.*Bad expr' $(find . -type f | grep -v \\.svn)
+</pre>
+
+<p>
+Much less civil! But wait there's more...
+</p>
+
+<h2>Perl Regexps</h2>
+
+<p>
+Since it's written in perl, ack makes use of perl regular expressions. So for
+example we can say:
+</p>
+
+<pre>
+$ ack '\b\$pattern\s*' .
+</pre>
+
+<p>
+This is much more convenient and less confusing than the miriad of syntaxes
+of grep out there, as well as the PCRE syntax, which is not fully compatible
+with perl's regular expressions, and 
+<a href="https://launchpad.net/distros/ubuntu/+source/grep/+bug/15051">is 
+not available in all builds of GNU grep</a>.
+</p>
+
+<h2>Filetype Identification</h2>
+
+<p>
+ack has several options to search in specific file types. For example we can 
+use:
+</p>
+
+<pre>
+$ ack --perl fprintf .
+tools/build/pbc2c.pl
+266:            fprintf(stderr, "\t" INTVAL_FMT ": %s\n", i, argv[i]);
+
+tools/dev/lib_deps.pl
+410:fprintf     stdio.h
+619:vfprintf    stdio.h
+</pre>
+
+<p>
+To look for occurences of "fprintf" in Perl files. Note that <tt>--perl</tt>
+will search several popular extensions for Perl files, but also files whose
+shabang-lines are appropriate to perl. We can specify more than one file type
+</p>
+
+<pre>
+$ ack --ruby --python 'print' .
+</pre>
+
+<p>
+And there are also the equivalent <tt>--no$lang</tt> flags.
+</p>
+
+<h2>What's Next?</h2>
+
+<p>
+ack has <a href="http://use.perl.org/~petdance/journal/31763">many
+other nifty features</a>. It's also still under development and 
+<a href="http://rt.cpan.org/Public/Dist/Display.html?Name=ack">has some 
+bugs</a>. So you can join the fun if you're interested to develop it.
+Until then, you can still use it as is for your enjoyment and convenience.
+</p>
+
+</body>
+</html>

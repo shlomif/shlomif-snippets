@@ -1,0 +1,73 @@
+<h2>Integration with Editors</h2>
+
+<h3>Integrating ack with Vim</h3>
+
+<p>
+A naive way to see ack results in vim's quickfix buffer would be to use the 
+<a href="http://vimdoc.sourceforge.net/htmldoc/quickfix.html#:cexpr">cexpr 
+command</a>:
+</p>
+
+<pre>
+:cexpr system('ack --perl map .')
+</pre>
+
+This can be abbreviated to:
+
+<pre>
+:cex system('ack --perl map .')
+</pre>
+
+<p>
+An alternative way would be to set the 
+<a href="http://vimdoc.sourceforge.net/htmldoc/quickfix.html#:grep">:grep 
+command</a> to use ack instead of grep:
+</p>
+
+<pre>
+:set grepprg=ack
+</pre>
+
+<p>
+Then one can write <tt>:grep [ack arguments]</tt> to search using ack. However
+this will not allow using grep with this command, so it's not such a good idea.
+</p>
+
+<p>
+One can create a better solution by adding the following lines to his or her
+.vimrc file:
+</p>
+
+<pre>
+function! Ack_Search(command)
+    cexpr system("ack " . a:command)
+endfunction
+
+command! -nargs=+ -complete=file Ack call Ack_Search(<q-args>)
+</pre>
+
+<p>
+This snippet defines a new Ex command called ":Ack" that searches using ack
+and displays the results. Then one can say:
+</p>
+
+<pre>
+:Ack --perl map .
+</pre>
+
+<p>
+Success!
+</p>
+
+<h3>Integrating ack with Emacs</h3>
+
+<p>
+In order to integrate ack with XEmacs, one can put <a href="emacs-ack.el">the 
+    following code</a> in his or her ~/.xemacs/custom.el file.
+</p
+
+<p>
+Then one can say "M-x ack" to invoke an ack command line. This code was only
+tested in XEmacs and may require some adaptation for GNU Emacs.
+</p>
+
