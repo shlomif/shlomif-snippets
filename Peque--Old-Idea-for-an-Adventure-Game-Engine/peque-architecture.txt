@@ -1,0 +1,49 @@
+Peque - Personal Quest Engine - Architecture
+--------------------------------------------
+
+The Environment Object:
+-----------------------
+
+Contains two separate objects: the front end and the back end. The front
+end has a reference to the back end, but the back end is not aware of the
+front end. This is so when the front end goes out of scope it will
+destroy the entire environment contained in the backend.
+
+The front end is the user interface. It transfers all requests to the
+back end using AUTOLOAD. The environment is responsible for initializing
+and managing the various entities in the game:
+
+1. Objects - collectable and static.
+2. Rooms.
+3. Characters
+4. Callbacks
+5. Methods
+6. Others... ?
+
+IDs
+---
+
+Each entity has a unique ID. The environment collects all the IDs of the 
+entities in a hash whose values are the entities. An entity can be referenced 
+by its ID.
+
+Entities:
+---------
+
+All entities contain a reference to the environment. they are constructed like
+this:
+
+my $carrot = $env->Object(
+    'name' => "Carrot",
+    'type' => "non-enum",
+    'desc' => "This is an orange"
+    );
+
+It can later be further initialized using the init method:
+
+$carrot->init(
+    'location' => $garden_room,
+    ...
+);
+
+
