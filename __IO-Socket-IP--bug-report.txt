@@ -1,0 +1,135 @@
+Hi all!
+
+When eth0 is up the following IO-Socket-IP script works fine:
+
+««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««
+#!/usr/bin/perl
+
+=head1 DESCRIPTION
+
+This program based on L<IO::Socket::IP> works fine if the Ethernet interface
+is enabled, and fails if it isn't (while lo is still fine). OTOH, doing
+C<curl http://localhost:6300/notify> works.
+
+=cut
+
+use strict;
+use warnings;
+use autodie;
+
+use Socket qw(:DEFAULT :crlf);
+
+use IO::Socket::IP;
+
+my $sock = IO::Socket::IP->new(
+    LocalHost => 'localhost',
+    PeerHost => 'localhost',
+    PeerPort => 6300,
+    Type => SOCK_STREAM,
+)
+    or die "Cannot init socket - $@";
+
+$sock->print("GET /notify$CRLF");
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2015 by Shlomi Fish
+
+This program is distributed under the MIT (X11) License:
+L<http://www.opensource.org/licenses/mit-license.php>
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+=cut
+»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ifconfig -a displays this:
+
+««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««
+root@telaviv1:~$ ifconfig -a
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.5  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::222:15ff:feab:3f85  prefixlen 64  scopeid 0x20<link>
+        ether 00:22:15:ab:3f:85  txqueuelen 1000  (Ethernet)
+        RX packets 948475  bytes 505552443 (482.1 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 979625  bytes 609207173 (580.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 20  memory 0xfe500000-fe520000
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 0  (Local Loopback)
+        RX packets 473772  bytes 112018554 (106.8 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 473772  bytes 112018554 (106.8 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@telaviv1:~$
+»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+However, after I do:
+
+««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««
+root@telaviv1:~$ ifconfig eth0 down
+root@telaviv1:~$ ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet6 fe80::222:15ff:feab:3f85  prefixlen 64  scopeid 0x20<link>
+        ether 00:22:15:ab:3f:85  txqueuelen 1000  (Ethernet)
+        RX packets 949158  bytes 506116633 (482.6 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 980204  bytes 609298209 (581.0 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 20  memory 0xfe500000-fe520000
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 0  (Local Loopback)
+        RX packets 473799  bytes 112020336 (106.8 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 473799  bytes 112020336 (106.8 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@telaviv1:~$
+»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+I'm getting:
+
+««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««««
+shlomif@telaviv1:~/IO-Socket-IP-0.37$ perl -Ilib ~/progs/perl/snippets/IO-Socket-IP-test-on-localhost.pl
+Cannot init socket - Connection refused at /home/shlomif/progs/perl/snippets/IO-Socket-IP-test-on-localhost.pl line 19.
+shlomif@telaviv1:~/IO-Socket-IP-0.37$
+»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+However, doing:
+
+    $ curl 'http://localhost:6300/notify'
+
+In this situation is working fine.
+
+Please try to reproduce and investigate this bug.
+
+Regards,
+
+    Shlomi Fish
