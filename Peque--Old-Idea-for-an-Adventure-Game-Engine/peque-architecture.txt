@@ -23,8 +23,8 @@ and managing the various entities in the game:
 IDs
 ---
 
-Each entity has a unique ID. The environment collects all the IDs of the 
-entities in a hash whose values are the entities. An entity can be referenced 
+Each entity has a unique ID. The environment collects all the IDs of the
+entities in a hash whose values are the entities. An entity can be referenced
 by its ID.
 
 Entities:
