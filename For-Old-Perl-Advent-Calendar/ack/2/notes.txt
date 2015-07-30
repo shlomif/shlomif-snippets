@@ -3,8 +3,8 @@ In Vim:
 
     :cexpr system('ack --perl map .')
 
-- can be abbreviated to 
-    
+- can be abbreviated to
+
     :cex system('ack --perl map .')
 
 Alternatively:
@@ -22,7 +22,7 @@ Downside: can no longer use the normal grep in the same session.
 And then type:
 
     :Ack [ack arguments]
-    
+
 To display the ack results in the quickfix dialog.
 
 Wrong! This does not handle single quotes well.

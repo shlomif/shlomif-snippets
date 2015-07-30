@@ -31,13 +31,13 @@ my $p_expr = & {
             &{\$local_self}();
         }";
     }
-    } 
-( 
+    }
+(
     "sub {
         my \$x = shift;
         return
         \"eval {
-            my \\\$local_self; 
+            my \\\$local_self;
             \\\$local_self = sub {
                 &{\$x}(\\\"\" . addbackslashes(\$x) . \"\\\");
             };
@@ -50,7 +50,7 @@ my $p_sub_expr =     "sub {
         my \$x = shift;
         return
         \"eval {
-            my \\\$local_self; 
+            my \\\$local_self;
             \\\$local_self = sub {
                 &{\$x}(\\\"\" . addbackslashes(\$x) . \"\\\");
             };

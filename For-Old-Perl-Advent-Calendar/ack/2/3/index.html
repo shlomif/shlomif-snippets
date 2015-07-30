@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -33,7 +33,7 @@ requirement is Andy's <a href="http://search.cpan.org/dist/File-Next/">File::Nex
 <h2>Let's start... searching!</h2>
 
 <p>
-Our corpus for this example is the 
+Our corpus for this example is the
 <a href="http://www.parrotcode.org/">parrot source tree</a>, which is about as
 heterogenous as a source tree as you can get. For the terminally curious: we
 grabbed a copy from the subversion repository, and then installed ack from
@@ -61,7 +61,7 @@ languages/m4/src/eval.c
 
 <p>
 <tt>ack</tt> accepts a perl regular expression as its first argument. The other
-arguments are path names. We specified "." (the current directory) and as we 
+arguments are path names. We specified "." (the current directory) and as we
 can see <tt>ack</tt> proceeded to recurse the branch, which it does by default.
 The first thing you probably notice is that the user-friendly output format. However, it will produce a more machine readable grep-like
 <tt>"${filename}:${line_num}:${line}"</tt>  format if its output is piped to
@@ -157,7 +157,7 @@ or there longopt <tt>--no$lang</tt> counterpart.
 <p>
 <tt>ack</tt> has <a href="http://use.perl.org/~petdance/journal/31763">many
 other nifty features</a>, but is still under development and
-<a href="http://rt.cpan.org/Public/Dist/Display.html?Name=ack">has some 
+<a href="http://rt.cpan.org/Public/Dist/Display.html?Name=ack">has some
 bugs</a>.
 
 <span style="color:#06c; font-weight: bold">#Is Andy actually looking for developers?</span>

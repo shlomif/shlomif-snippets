@@ -25,9 +25,9 @@ sub get_new_coords
     my @coords = @$coords_ref;
 
     return [
-        map 
-        { 
-            [ 
+        map
+        {
+            [
                 (1-$p)*$coords[$_][0]+$p*$coords[($_+1)%@coords][0],
                 (1-$p)*$coords[$_][1]+$p*$coords[($_+1)%@coords][1],
             ]
@@ -39,7 +39,7 @@ sub get_new_coords
 sub mygen
 {
     my ($id_base, $init_coords, $max_depth, $p, $style_cb) = @_;
-    
+
     my $coords = $init_coords;
 
     foreach my $depth (0 .. ($max_depth-1))
@@ -54,7 +54,7 @@ sub mygen
                 -type=>'polyline',
                 -closed=>'true',
             );
-        
+
         $svg->polyline(
             %$path_points,
             id => "${id_base}_$depth",
@@ -72,7 +72,7 @@ my @fills = (qw(red green yellow blue orange));
 sub color_style
 {
     my $depth = shift;
-    
+
     return
     {
         'fill-opacity' => 0.5,

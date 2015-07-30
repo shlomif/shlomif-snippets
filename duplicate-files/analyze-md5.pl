@@ -22,7 +22,7 @@ while (<>)
     /^([0-9a-fA-F]+)\s+(\.\/.+)$/;
     my ($checksum, $filename) = ($1, $2);
     if ($checksum eq $prev)
-    {        
+    {
     }
     else
     {

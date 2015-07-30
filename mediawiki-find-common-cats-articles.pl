@@ -9,8 +9,8 @@ use IO::All;
 my $mw = MediaWiki::API->new({api_url => "http://cms.wikia.com/api.php" });
 
 # log in to the wiki
-$mw->login( { lgname => 'Shlomif', 
-        lgpassword => io("wikia-password.txt")->chomp->getline() 
+$mw->login( { lgname => 'Shlomif',
+        lgpassword => io("wikia-password.txt")->chomp->getline()
     }
     )
     || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};

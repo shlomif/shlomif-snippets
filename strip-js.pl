@@ -7,10 +7,10 @@ use HTML::StripScripts::Parser;
 {
     package My::StripScripts;
     use base qw(HTML::StripScripts::Parser);
-    
+
     sub validate_href_attribute {
         my ($self, $text) = @_;
-    
+
         my $ret = $self->SUPER::validate_href_attribute($text);
         if ($ret)
         {

@@ -26,7 +26,7 @@ while (my $result = $tree->next())
 {
     if (last_component($result) eq "cur")
     {
-        # Make sure we don't get each and every files in the directory as a 
+        # Make sure we don't get each and every files in the directory as a
         # result.
         $tree->prune();
         push @maildirs, $result;

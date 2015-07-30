@@ -158,10 +158,10 @@ being instantiated and interrupted, to finding files. However, it is
 implemented using a closure, which is less flexible, and, furthermore, has
 become unmaintained.
 
-Randal L. Schwartz wrote a some code for an iterative directory tree traverser 
-in one of his columns 
-(see L<http://www.stonehenge.com/merlyn/LinuxMag/col30.html,some>). 
-This code is implemented by tying to a hash, and due to the fact it was 
+Randal L. Schwartz wrote a some code for an iterative directory tree traverser
+in one of his columns
+(see L<http://www.stonehenge.com/merlyn/LinuxMag/col30.html,some>).
+This code is implemented by tying to a hash, and due to the fact it was
 written for publication, its terms are unclear.
 
 L<File::FTS> is an old attempt at supplying an iterative directory traverser.

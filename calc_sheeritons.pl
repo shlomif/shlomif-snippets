@@ -6,17 +6,17 @@ use Data::Dumper;
 sub create_factor_map
 {
     my $how_much = shift;
-    
+
     my @numbers_proto = ( 0 .. $how_much);
-    my @numbers = 
-        (map 
-            { 
-                { 
-                    'idx' => $_, 
-                    'factors' => {}, 
-                    'Sh' => 0 
+    my @numbers =
+        (map
+            {
+                {
+                    'idx' => $_,
+                    'factors' => {},
+                    'Sh' => 0
                 };
-            } 
+            }
          @numbers_proto
         );
 
@@ -24,13 +24,13 @@ sub create_factor_map
     my $limit = $how_much / 2;
     my ($power_exp, $power_limit, $power);
     my ($i);
-    
-    for($factor = 2; $factor <= $limit ; $factor++)    
+
+    for($factor = 2; $factor <= $limit ; $factor++)
     {
         if (scalar(keys(%{$numbers[$factor]->{'factors'}})) == 0)
         {
             # This is a prime number
-            
+
             $power_limit = int(log($how_much)/log($factor));
             $power = $factor;
             for($power_exp = 1 ; $power_exp <= $power_limit ; $power_exp++, $power *= $factor)
@@ -64,7 +64,7 @@ sub calc_sheeritons
             $num_iters++;
         }
         $numbers->[$num]->{'Sh'} = $num_iters;
-    }    
+    }
 }
 
 sub gcd
@@ -134,7 +134,7 @@ sub analyze
         if (scalar(@factors) >= 2)
         {
             my @sh_bases;
-            
+
             @sh_bases = (map { $numbers->[$_ ** $factors_hash->{$_}]->{'Sh'} } @factors);
             $lcm = &multi_lcm(@sh_bases);
             $sh = $record->{'Sh'};

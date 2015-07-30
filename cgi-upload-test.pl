@@ -17,7 +17,7 @@ if ($q->param('sent'))
     my $file_name = $upload->file_name(FILE_PARAM);
     my $file_type = $upload->file_type(FILE_PARAM);
     my $file_handle = $upload->file_handle(FILE_PARAM);
-    
+
     print "<html><body>\n";
     print "<p>Filename = " . CGI::escapeHTML($file_name) . "</p>\n";
     print "<p>Filetype = " . CGI::escapeHTML($file_type) . "</p>\n";
@@ -26,7 +26,7 @@ if ($q->param('sent'))
         local $/;
         $content = <$file_handle>;
     }
-    
+
     print "<p>content = " . CGI::escapeHTML($content) . "</p>\n";
     print "</body></html>\n";
 }

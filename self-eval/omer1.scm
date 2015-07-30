@@ -1,17 +1,17 @@
-(define global-self 
-  (lambda args 
+(define global-self
+  (lambda args
     (
 	(lambda (f)
-      		(f 
+      		(f
 			(
-				(lambda (x) 
-            			`(letrec ((local-self  
-                       			(lambda () (,x ',x)))) 
-               				(local-self))) 
-          			
-          			'(lambda (x) 
-             				`(letrec ((local-self  
-                        		(lambda () (,x ',x)))) 
+				(lambda (x)
+            			`(letrec ((local-self
+                       			(lambda () (,x ',x))))
+               				(local-self)))
+
+          			'(lambda (x)
+             				`(letrec ((local-self
+                        		(lambda () (,x ',x))))
                 			(local-self))
                 		)
                 	)
@@ -24,18 +24,18 @@
 
 (define s-expr
 			(
-				(lambda (x) 
-            			`(letrec ((local-self  
-                       			(lambda () (,x ',x)))) 
-               				(local-self))) 
-          			
-          			'(lambda (x) 
-             				`(letrec ((local-self  
-                        		(lambda () (,x ',x)))) 
+				(lambda (x)
+            			`(letrec ((local-self
+                       			(lambda () (,x ',x))))
+               				(local-self)))
+
+          			'(lambda (x)
+             				`(letrec ((local-self
+                        		(lambda () (,x ',x))))
                 			(local-self))
                 		)
                 	)
-	
+
 )
 
 (display (global-self))

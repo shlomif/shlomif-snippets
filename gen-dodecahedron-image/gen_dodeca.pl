@@ -62,7 +62,7 @@ for($side=1;$side<=5;$side++)
 {
     for($a=0;$a<4;$a++)
     {
-        $edges[$side][$connected[$side][$a+1]] = 
+        $edges[$side][$connected[$side][$a+1]] =
             $edges[$side][$connected[$side][$a]]->rotate($sides[$side], ($pi-$pi*3/5));
         $edges[$connected[$side][$a+1]][$side] = (-1) * $edges[$side][$connected[$side][$a+1]];
     }
@@ -73,7 +73,7 @@ for($side=6;$side<=10;$side++)
     $sides[$side] = (-1) * $sides[11-$side];
     for($a=0;$a<4;$a++)
     {
-        $edges[$side][$connected[$side][$a+1]] = 
+        $edges[$side][$connected[$side][$a+1]] =
             $edges[$side][$connected[$side][$a]]->rotate($sides[$side], ($pi-$pi*3/5));
         $edges[$connected[$side][$a+1]][$side] = (-1) * $edges[$side][$connected[$side][$a+1]];
     }

@@ -23,7 +23,7 @@ sub get_squaring_factors($n,$start_from=2)
     # This function is recursive to make better use of the Memoization
     # feature.
     my $division_factors = get_squaring_factors(int($n / $p), $p);
-    return 
+    return
         (%gsf_cache{$n} = multiply_squaring_factors([$p], $division_factors));
 }
 

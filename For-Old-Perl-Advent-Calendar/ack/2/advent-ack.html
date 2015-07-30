@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -22,17 +22,17 @@ version too. (Or else - no help for you.)
 <p>
 <a href="http://petdance.com/ack/">ack</a> is a useful command line utility
 for searching text, primarily intended for scanning trees of code, especially
-such trees that contain code in many different languages. ack command lines 
+such trees that contain code in many different languages. ack command lines
 tend to be much shorter than the equivalent <tt>grep -r</tt> or <tt>find</tt>
 command lines. ack is written in perl and except for the perl core, requires
-only the <a href="http://search.cpan.org/dist/File-Next/">File::Next</a> 
+only the <a href="http://search.cpan.org/dist/File-Next/">File::Next</a>
 module from the CPAN.
 </p>
 
 <h2>Let's start... searching!</h2>
 
 <p>
-Our corpus for this example would be the 
+Our corpus for this example would be the
 <a href="http://www.parrotcode.org/">parrot source tree</a> which is as
 heterogenous a source tree as they can get. Use the following command to
 checkout it from its subversion repository:
@@ -65,10 +65,10 @@ languages/m4/src/eval.c
 
 <p>
 ack accepts a perl regular expression as its first argument. The other
-arguments are path names. We specified "." (the current directory) and as we 
-can see ack recursed into it, which it does by default. The first thing we 
+arguments are path names. We specified "." (the current directory) and as we
+can see ack recursed into it, which it does by default. The first thing we
 notice is that its output is in a userfriendly format. However it will use
-a more machine readable grep-like <tt>"${filename}:${line_num}:${line}"</tt> 
+a more machine readable grep-like <tt>"${filename}:${line_num}:${line}"</tt>
 format if it is piped to a program:
 </p>
 
@@ -132,15 +132,15 @@ $ ack '\b\$pattern\s*' .
 <p>
 This is much more convenient and less confusing than the miriad of syntaxes
 of grep out there, as well as the PCRE syntax, which is not fully compatible
-with perl's regular expressions, and 
-<a href="https://launchpad.net/distros/ubuntu/+source/grep/+bug/15051">is 
+with perl's regular expressions, and
+<a href="https://launchpad.net/distros/ubuntu/+source/grep/+bug/15051">is
 not available in all builds of GNU grep</a>.
 </p>
 
 <h2>Filetype Identification</h2>
 
 <p>
-ack has several options to search in specific file types. For example we can 
+ack has several options to search in specific file types. For example we can
 use:
 </p>
 
@@ -172,8 +172,8 @@ And there are also the equivalent <tt>--no$lang</tt> flags.
 
 <p>
 ack has <a href="http://use.perl.org/~petdance/journal/31763">many
-other nifty features</a>. It's also still under development and 
-<a href="http://rt.cpan.org/Public/Dist/Display.html?Name=ack">has some 
+other nifty features</a>. It's also still under development and
+<a href="http://rt.cpan.org/Public/Dist/Display.html?Name=ack">has some
 bugs</a>. So you can join the fun if you're interested to develop it.
 Until then, you can still use it as is for your enjoyment and convenience.
 </p>

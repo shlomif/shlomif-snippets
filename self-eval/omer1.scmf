@@ -1,13 +1,13 @@
-(define global-self 
+(define global-self
   (lambda args
     ((lambda (f)
-      (f ((lambda (x) 
-            `(letrec ((local-self  
-                       (lambda () (,x ',x)))) 
-               (local-self))) 
-          '(lambda (x) 
-             `(letrec ((local-self  
-                        (lambda () (,x ',x)))) 
+      (f ((lambda (x)
+            `(letrec ((local-self
+                       (lambda () (,x ',x))))
+               (local-self)))
+          '(lambda (x)
+             `(letrec ((local-self
+                        (lambda () (,x ',x))))
                 (local-self))))))
      (lambda (sexpr) sexpr))))
 

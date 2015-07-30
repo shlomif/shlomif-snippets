@@ -1,7 +1,7 @@
 Let's examine the series f[k] = a*(b**k)+1 where a and b are positive integers,
 and ** is power. Can one show that for some values of a and b, the series will
 contain an infinite number of primes? (i.e: for every N there exists a k0 > N,
-so that f[k0] is prime.) 
+so that f[k0] is prime.)
 
 From my superficial attempts, I found out that some series like that will never
 have primes. Like f[k] = 3**k+1, because 3**k is odd and together they form

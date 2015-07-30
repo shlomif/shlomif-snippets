@@ -27,5 +27,5 @@ foreach my $l (@$episode_links)
         open O, ">", "downloads/$fn";
         print O $episode_mech->content();
         close(O);
-    }   
+    }
 }

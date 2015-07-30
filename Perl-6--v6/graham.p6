@@ -25,10 +25,10 @@ sub get_squaring_factors($n,$start_from=2)
     my $p = [//] grep { $n % $_ == 0 } ($start_from .. $n);
     # This function is recursive to make better use of the Memoization
     # feature.
-    return 
-        (%gsf_cache{$n} = 
+    return
+        (%gsf_cache{$n} =
             multiply_squaring_factors(
-                [$p], 
+                [$p],
                 get_squaring_factors(int($n / $p), $p)
             )
         );
@@ -38,14 +38,14 @@ sub get_squaring_factors($n,$start_from=2)
 sub Graham($n)
 {
     my $n_sq_factors = get_squaring_factors($n);
-    
+
     # The graham number of a perfect square is itself.
     if ($n_sq_factors.elems() == 0)
     {
         return ($n, [$n]);
     }
 
-    # Cheating: 
+    # Cheating:
     # Check if between n and n+largest_factor we can fit
     # a square of SqFact{n*(n+largest_factor)}. If so, return
     # n+largest_factor.
@@ -59,7 +59,7 @@ sub Graham($n)
         my $largest_factor = $n_sq_factors.[-1];
 
         my ($lower_bound, $lb_sq_factors);
-        
+
         $lower_bound = $n + $largest_factor;
         loop
         {
@@ -71,14 +71,14 @@ sub Graham($n)
             $lower_bound += $largest_factor;
         }
 
-        my $n_times_lb = 
+        my $n_times_lb =
             multiply_squaring_factors($n_sq_factors, $lb_sq_factors);
 
         my $rest_of_factors_product = [*] @$n_times_lb;
 
         my $low_square_val = int(sqrt($n/$rest_of_factors_product));
         my $high_square_val = int(sqrt($lower_bound/$rest_of_factors_product));
-        
+
         if ($low_square_val != $high_square_val)
         {
             return ($lower_bound, [$n, ($low_square_val+1)*($low_square_val+1)*$rest_of_factors_product,$lower_bound]);
@@ -89,7 +89,7 @@ sub Graham($n)
     my (%primes_to_ids_map);
     my $next_id = 0;
 
-    # @base is an array that for each ID of a prime number holds the 
+    # @base is an array that for each ID of a prime number holds the
     # controlling vector for this number.
     #
     # This is in fact a matrix that is kept stair-shaped and canonized.
@@ -104,7 +104,7 @@ sub Graham($n)
         %primes_to_ids_map{$p} = ($next_id++);
     }
 
-    # $n_vec is used to determine if $n can be composed out of the base's 
+    # $n_vec is used to determine if $n can be composed out of the base's
     # vectors.
     my $n_vec = $n_sq_factors;
 
@@ -115,7 +115,7 @@ sub Graham($n)
     loop ($i = $n+1 ; ; $i++)
     {
         my $i_sq_factors = get_squaring_factors($i);
-        
+
         # Skip perfect squares - they do not add to the solution
         if ($i_sq_factors.elems() == 0)
         {
@@ -157,7 +157,7 @@ sub Graham($n)
                 }
             }
         }
- 
+
         # Get the minimal ID and its corresponding prime number
         # in $final_vec.
         my $min_id = -1;
@@ -167,7 +167,7 @@ sub Graham($n)
         {
             my $id = %primes_to_ids_map{$p};
             if (($min_id < 0) || ($min_id > $id))
-            { 
+            {
                 $min_id = $id;
                 $min_p = $p;
             }
@@ -194,7 +194,7 @@ sub Graham($n)
                 }
             }
         }
- 
+
         # A closure to print the base. It is not used but can prove useful.
         my $print_base = sub {
             print "Base=\n\n";
