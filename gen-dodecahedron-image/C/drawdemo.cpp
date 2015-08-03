@@ -304,7 +304,7 @@ void DrawView::drawIt( QPainter *p )
 void DrawView::printIt()
 {
     if ( printer->setup(this) ) {
-	QPainter paint( printer );	
+	QPainter paint( printer );
 	drawIt( &paint );
     }
 }
