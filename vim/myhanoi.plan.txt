@@ -1,0 +1,6 @@
+Lines 0-2 - The towers
+Line 10 - The stack
+Line 11 - The stack pointer
+Line 12 - The incremented/decremented stack pointer.
+
+
