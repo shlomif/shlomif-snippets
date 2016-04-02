@@ -31,8 +31,8 @@ foreach my $acct (@accounts)
     my $path = $acct->{path_to_wiki} || "htdocs";
     print "$user\n";
     system(
-        "ssh", 
-        ($user . '@' . "hexten.net"), 
+        "ssh",
+        ($user . '@' . "hexten.net"),
         (
             "cd ${path}/maintenance && (for I in "
                 . shell_quote(@hosts_unquoted) . " ; do "
