@@ -20,7 +20,7 @@ while (1)
 {
     $t->cmd("next\n");
 
-    sleep(2);
+    sleep(0.05);
 }
 
 =head1 COPYRIGHT & LICENSE
