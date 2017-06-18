@@ -5,4 +5,8 @@
 This repository contains various small Perl 5 programs and snippets as
 collected by Shlomi Fish (L<http://www.shlomifish.org/> ).
 
+=head1 See Also
+
+L<https://github.com/shlomif/shlomif-c-snippets> - my C, C++, etc. snippets.
+
 =cut
