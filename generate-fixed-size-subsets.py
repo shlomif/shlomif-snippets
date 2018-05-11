@@ -15,7 +15,7 @@ def gen_subsets(max_, count, i):
     if count == 0:
         yield []
     else:
-        for n in range(i, max_):
+        for n in range(i, max_-count+1):
             for s in gen_subsets(max_, count-1, n+1):
                 yield [n] + s
 
