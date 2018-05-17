@@ -8,6 +8,8 @@
 
 """
 approximate e
+
+See https://en.wikipedia.org/wiki/E_(mathematical_constant) .
 """
 
 
@@ -20,7 +22,7 @@ def main():
         n += 1
         term /= n
         sum_ += term
-        print("%.70f" % sum_)
+        print("%.70f" % (sum_))
 
 
 main()
