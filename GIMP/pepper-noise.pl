@@ -1,6 +1,7 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 use strict;
+use warnings;
 
 use Gimp ":auto";
 use Gimp::Fu;
@@ -8,7 +9,7 @@ use PDL;
 use PDL::Core;
 use Carp;
 
-sub sub2ind ($$;@) {
+sub sub2ind {
   my $dims = shift;
   $dims = [$dims->dims] if UNIVERSAL::isa($dims,'PDL');
   croak "need dims array ref" unless ref $dims eq 'ARRAY';

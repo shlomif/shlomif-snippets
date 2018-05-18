@@ -1,3 +1,8 @@
+package MyProxy;
+
+use strict;
+use warnings;
+
 package MyProxy::Hash;
 
 require Tie::Hash;

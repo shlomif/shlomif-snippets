@@ -41,4 +41,3 @@ sub setup_plugins
 }
 
 1;
-
