@@ -1,7 +1,9 @@
-package App::Notifier::Service;
+package main;
 
 use strict;
 use warnings;
+
+package App::Notifier::Service;
 
 use IO::Socket::INET ();
 

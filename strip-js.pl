@@ -1,22 +1,27 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 use strict;
+use warnings;
+use autodie;
+use Path::Tiny qw/ path /;
 
 use HTML::StripScripts::Parser;
 
 {
+
     package My::StripScripts;
     use base qw(HTML::StripScripts::Parser);
 
-    sub validate_href_attribute {
-        my ($self, $text) = @_;
+    sub validate_href_attribute
+    {
+        my ( $self, $text ) = @_;
 
         my $ret = $self->SUPER::validate_href_attribute($text);
         if ($ret)
         {
             return $ret;
         }
-        if ($text =~ m#^[\.\/\w\-]{1,100}$#)
+        if ( $text =~ m#^[\.\/\w\-]{1,100}$# )
         {
             return $text;
         }
@@ -25,21 +30,18 @@ use HTML::StripScripts::Parser;
 
 sub strip_file
 {
-        my $filename = shift;
-        my $hss = My::StripScripts->new(
-               { Context => 'Document',
-                AllowSrc => 1,
-                AllowHref => 1,
-                },
-               );
+    my $filename = shift;
+    my $hss      = My::StripScripts->new(
+        {
+            Context   => 'Document',
+            AllowSrc  => 1,
+            AllowHref => 1,
+        },
+    );
 
-        $hss->parse_file($filename);
-        local (*O);
-        open O, ">$filename.js-less";
-        print O $hss->filtered_document();
-        close(O);
+    $hss->parse_file($filename);
+    path("$filename.js-less")->spew_utf8( $hss->filtered_document() );
 }
 
 my $filename = shift;
 strip_file($filename);
-
