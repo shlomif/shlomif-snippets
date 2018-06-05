@@ -1,0 +1,3 @@
+#!/bin/cat
+Testing if the shebang shows when executing.
+Hello world!
