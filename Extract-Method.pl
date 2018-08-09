@@ -25,4 +25,3 @@ my $elem = $Document->find_first(
 my $method_name = "_report_start_single_method_run";
 
 1;
-
