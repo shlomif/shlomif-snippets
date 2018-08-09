@@ -1,3 +1,5 @@
+" Note by shlomif : found on the Net. Unknown licence.
+"
 set remap
 set noterse
 set wrapscan
