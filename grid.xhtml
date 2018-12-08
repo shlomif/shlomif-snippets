@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<title>Shlomi Fish’s Humorous Creations</title>
+<meta charset="utf-8" />
+<style>
+#container-all {
+    display: grid;
+        grid-template-columns: repeat(5, 1fr);
+
+    width:100%;
+    /*display: table-row;*/
+}
+main, #navbar_wrapper {}
+#navbar_wrapper { grid-column:1 / 2;grid-row:1;}
+main { grid-column:2 / 5;grid-row:1;}
+/* * { outline: hotpink solid 2px;}*/
+</style>
+</head>
+<body>
+<div class="header" id="header">
+    <p style="color:red;">
+    Note!!! I don't want to use float: for main and #navbar_wrapper because
+    after that using clear: is hard, and float: is a workaround for the
+    MSIE 6 era. Please do not suggest it.
+    </p>
+</div>
+<div id="faux">
+<p class="invisible"><a href="#main">Go to main content</a></p>
+<div id="container-all">
+<main id="main">
+    <p style="color:red;">
+    This should be on the right
+    </p>
+<p class="invisible"><a href="#aft_sub_menu">Skip the
+sub-menu.</a></p>
+<div class="menu_floaty">
+<div class="sub_menu">
+<h2>Humour Section Menu</h2>
+<ul class="nav_links">
+<li><img alt="Previous Page" src=
+"../images/sect-arr-left-disabled.svg" class="bless" /></li>
+<li><img alt="Up in the Site" src=
+"../images/sect-arr-up-disabled.svg" class="bless" /></li>
+<li><a href="stories/" title="Next Page (Alt+N)"><img alt=
+"Next Page" src="../images/sect-arr-right.svg" class=
+"bless" /></a></li>
+</ul>
+</div>
+</div>
+<div id="aft_sub_menu"></div>
+<header>
+<h1>Shlomi Fish’s Humorous Creations</h1>
+</header>
+</main>
+
+
+<div id="navbar_wrapper">
+    <p style="color:red;">
+    This should be on the left.
+    </p>
+    <p>
+    navbar
+    </p>
+</div>
+
+</div>
+</div>
+
+<footer id="footer">
+<hr />
+<p>
+bottom
+</p>
+</footer>
+
+</body>
+</html>
