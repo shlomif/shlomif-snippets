@@ -90,6 +90,9 @@ def test_func(e):
     prevs.append(it.next())
     while True:
         c += 1
+        if not (c & ((1 << 20) - 1)):
+            sys.stderr.write("Reached 0x%X\n" % c)
+            sys.stderr.flush()
         n = it.next()
         if n[0] == prevs[0][0]:
             prevs.append(n)
@@ -101,4 +104,4 @@ def test_func(e):
             prevs = [n]
 
 
-test_func(3)
+test_func(4)
