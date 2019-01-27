@@ -24,48 +24,36 @@
 
 
 import heapq
-import math
 import sys
 
 from six import print_
 
 
 class MyIter2:
+    def _set_s(self):
+        self.s = self.n_pow + self.m ** self.e
+
+    def _set_n(self, n):
+        """docstring for _set_n"""
+        self.n = n
+        self.n_pow = n ** self.e
+
     def __init__(self, e, n, m=0):
         self.e = e
-        self.n = n
+        self._set_n(n)
         self.m = m
-        self.s = n ** e + m ** e
-        self.max = 2 * n ** e
-
-    def skip(self, tgt):
-        # Not working
-        if tgt > self.max:
-            return False
-        if tgt == self.s:
-            return True
-        m = math.floor(math.sqrt(tgt-self.init_s))
-        self.m = m
-        self.s = self.init_s + ((m*(m+1)))
-        if self.s < tgt:
-            self.m += 1
-            self.s += (m + 1) << 1
-        return True
+        self._set_s()
 
     def adv(self):
         if self.m == self.n:
             return False
         self.m += 1
-        e = self.e
-        self.s = self.n ** e + self.m ** e
+        self._set_s()
         return True
 
     def n_inc(self):
-        self.n += 1
-        e = self.e
-        self.s = self.n ** e + self.m ** e
-        self.init_s = self.s
-        self.max = 2 * self.n ** e
+        self._set_n(self.n + 1)
+        self._set_s()
 
     def clone(self):
         return MyIter2(self.e, self.n, self.m)
@@ -93,27 +81,6 @@ class IterSumTwo:
         if i.adv():
             heapq.heappush(self.q, (i.s, n, i))
         return s, n, m
-
-    def skip(self, tgt):
-        new = []
-        maxn = 0
-        for x in self.q:
-            s, n, i = x
-            if i.skip(tgt):
-                new.append((i.s, n, i))
-                if maxn < n:
-                    maxn = n
-        while self.it.max < tgt:
-            self.it.n_inc()
-        while self.it.s <= tgt:
-            if maxn != self.it.n:
-                s, n, i = self.i()
-                i.skip(tgt)
-                new.append((i.s, n, i))
-            self.it.n_inc()
-        # print_(cnt)
-        heapq.heapify(new)
-        self.q = new
 
 
 def test_func(e):
