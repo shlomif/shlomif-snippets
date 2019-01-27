@@ -83,25 +83,27 @@ class IterSumTwo:
         return s, n, m
 
 
-def test_func(e):
+def test_func(e, thresh):
     it = IterSumTwo(e)
     c = 0
     prevs = []
     prevs.append(it.next())
+    fh = open('sums_of_powers.log.txt', 'a')
     while True:
         c += 1
         if not (c & ((1 << 20) - 1)):
-            sys.stderr.write("Reached 0x%X\n" % c)
+            sys.stderr.write("Reached 0x%X ; %d\n" % (c, prevs[0][0]))
             sys.stderr.flush()
         n = it.next()
         if n[0] == prevs[0][0]:
             prevs.append(n)
         else:
-            if len(prevs) >= 2:
-                print_(len(prevs), prevs[0][0],
-                       [(x, y) for z, x, y in prevs])
-                sys.stdout.flush()
+            if len(prevs) >= thresh:
+                for f in [fh, sys.stdout]:
+                    print_(len(prevs), prevs[0][0],
+                           [(x, y) for z, x, y in prevs], file=f)
+                    f.flush()
             prevs = [n]
 
 
-test_func(4)
+test_func(4, 3)
