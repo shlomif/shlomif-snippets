@@ -26,7 +26,27 @@
 import heapq
 import sys
 
+# from gmpy2 import mpz
+# from gmpy_cffi import mpz
+
 from six import print_
+
+
+class mpz:
+    def iroot(x, e):
+        high = x
+        low = 0
+        while high >= low:
+            mid = (high + low) >> 1
+            if mid ** e < x:
+                low = mid + 1
+            else:
+                high = mid - 1
+        while mid ** e < x:
+            mid += 1
+        while mid ** e > x:
+            mid -= 1
+        return mid, (mid ** e == x)
 
 
 class MyIter2:
@@ -58,6 +78,16 @@ class MyIter2:
     def clone(self):
         return MyIter2(self.e, self.n, self.m)
 
+    def skip(self, tgt):
+        if tgt > (self.n_pow << 1):
+            return False
+        if tgt == self.s:
+            return True
+        m, is_exact = mpz.iroot(tgt-self.n_pow, self.e)
+        self.m = m + (0 if is_exact else 1)
+        self._set_s()
+        return True
+
 
 class IterSumTwo:
     def i(self):
@@ -82,9 +112,33 @@ class IterSumTwo:
             heapq.heappush(self.q, (i.s, n, i))
         return s, n, m
 
+    def skip(self, tgt):
+        q = []
+        minn, is_exact = mpz.iroot(tgt >> 1, self.e)
+        if not is_exact:
+            minn += 1
+        maxn, is_exact = mpz.iroot(tgt, self.e)
+        if not is_exact:
+            maxn -= 1
+        e = self.e
+        it = MyIter2(e, minn, 0)
+        n = minn
+        while n <= maxn:
+            itc = it.clone()
+            self.it = itc
+            itc.skip(tgt)
+            q.append(self.i())
+            it.n_inc()
+            n += 1
+        self.it = MyIter2(e, maxn, 0)
+        self.n = maxn
+        heapq.heapify(q)
+        self.q = q
 
-def test_func(e, thresh):
+
+def test_func(e, thresh, start_from):
     it = IterSumTwo(e)
+    it.skip(start_from)
     c = 0
     prevs = []
     prevs.append(it.next())
@@ -106,4 +160,4 @@ def test_func(e, thresh):
             prevs = [n]
 
 
-test_func(4, 3)
+test_func(4, 3, 208824111896687642177)
