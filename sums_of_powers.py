@@ -21,6 +21,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+"""
+sums_of_powers.py - code to search for numbers n, which have two or more
+pairs of non-negative integers a, b so that n = a ** e + b ** e for
+a certain integral exponent "e".
+
+E.g: test_func(3, 2, 0) finds https://en.wikipedia.org/wiki/1729_%28number%29
+because 1729 == 1 ** 3 + 12 ** 3 = 9 ** 3 + 10 ** 3
+"""
 
 
 import heapq
