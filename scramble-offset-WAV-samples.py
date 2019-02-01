@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This little program offsets the samples of a WAV file by delta in the range
 # -3 to 3. The result appears to be still hearable (though there are some
@@ -7,7 +7,6 @@
 # realistic.
 
 # TODO:
-# * Make the code portable to python 3.
 # * Optimize the runtime speed.
 # * Convert to use some command line arguments.
 
