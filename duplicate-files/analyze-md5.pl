@@ -4,34 +4,31 @@ use strict;
 use warnings;
 
 my $prev = "Z";
-my @fns = ();
+my @fns;
 
 sub duplicates
 {
-    if (@fns >= 2)
+    if ( @fns >= 2 )
     {
-        print (map { "$_\n" } @fns);
+        print( map { "$_\n" } @fns );
         print "\n";
     }
-    @fns = ();
+    $#fns = -1;
 }
 
 while (<>)
 {
     chomp;
-    /^([0-9a-fA-F]+)\s+(\.\/.+)$/;
-    my ($checksum, $filename) = ($1, $2);
-    if ($checksum eq $prev)
+    if ( my ( $checksum, $filename ) = /\A([0-9a-fA-F]+)\s+(\S.*)\z/ )
     {
-    }
-    else
-    {
-        duplicates();
-    }
+        if ( $checksum ne $prev )
+        {
+            duplicates();
+        }
 
-    $prev = $checksum;
-    push @fns, $filename;
+        $prev = $checksum;
+        push @fns, $filename;
+    }
 }
 
 duplicates();
-
