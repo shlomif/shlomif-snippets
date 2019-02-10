@@ -144,13 +144,12 @@ class IterSumTwo:
         self.q = q
 
 
-def test_func(e, thresh, start_from):
+def my_iter_func(e, thresh, start_from):
     it = IterSumTwo(e)
     it.skip(start_from)
     c = 0
     prevs = []
     prevs.append(it.next())
-    fh = open('sums_of_powers.log.txt', 'a')
     while True:
         c += 1
         if not (c & ((1 << 20) - 1)):
@@ -161,11 +160,21 @@ def test_func(e, thresh, start_from):
             prevs.append(n)
         else:
             if len(prevs) >= thresh:
-                for f in [fh, sys.stdout]:
-                    print_(len(prevs), prevs[0][0],
-                           [(x, y) for z, x, y in prevs], file=f)
-                    f.flush()
+                yield ("result", (len(prevs),
+                                  prevs[0][0], [(x, y) for z, x, y in prevs]))
             prevs = [n]
 
 
+def test_func(e, thresh, start_from):
+    fh = open('sums_of_powers.log.txt', 'a')
+    it = my_iter_func(e, thresh, start_from)
+    for event in it:
+        type_, content = event
+        if type_ == "result":
+            for f in [fh, sys.stdout]:
+                print_(*content, file=f)
+                f.flush()
+
+
+# test_func(3, 2, 0)
 test_func(4, 3, 208824111896687642177)
