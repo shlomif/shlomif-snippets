@@ -220,6 +220,9 @@ sub execute
 
     $workbook->close();
 
+    return;
 }
+
+1;
 
 __END__
