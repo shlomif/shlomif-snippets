@@ -26,7 +26,7 @@ sub create_closure_as_method
         my $self = shift;
         my $arg = shift;
         print "${counter}: $arg\n";
-        $counter++;
+        ++$counter;
     };
     return 0;
 }
@@ -60,7 +60,7 @@ sub create2
         print "MySub: $counter : $arg\n";
         if ($inc)
         {
-            $counter++;
+            ++$counter;
         }
     };
 }

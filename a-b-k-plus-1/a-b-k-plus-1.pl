@@ -20,5 +20,5 @@ while(1)
 continue
 {
     $product *= $b;
-    $k++;
+    ++$k;
 }

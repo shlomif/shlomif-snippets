@@ -10,15 +10,15 @@ my $dir = "$ENV{HOME}/tmp/unix-domain-socket-test";
 mkpath($dir);
 
 my $server = IO::Socket::UNIX->new(
-    Type => SOCK_STREAM(),
-    Local => "$dir/foo.sock",
+    Type   => SOCK_STREAM(),
+    Local  => "$dir/foo.sock",
     Listen => 1,
 );
 
-my $count = 1;
-while (my $conn = $server->accept())
+my $count = 0;
+while ( my $conn = $server->accept() )
 {
-    $conn->print("Hello " . ($count++) . "\n");
+    $conn->print( "Hello " . ( ++$count ) . "\n" );
 }
 
 =head1 COPYRIGHT & LICENSE

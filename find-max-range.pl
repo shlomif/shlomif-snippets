@@ -11,7 +11,7 @@ my $max;
 my $start;
 my $end;
 
-for (my $i=0; $i < @numbers ; $i++)
+for (my $i=0; $i < @numbers ; ++$i)
 {
     if (!defined($max) || ($numbers[$i] >= $max))
     {
@@ -19,9 +19,9 @@ for (my $i=0; $i < @numbers ; $i++)
 
         while (($i < @numbers) && ($numbers[$i] == $numbers[$init_i]))
         {
-            $i++;
+            ++$i;
         }
-        $i--;
+        --$i;
 
         if (!defined($start) || ($max < $numbers[$i]) || ($end-$start < $i-$init_i))
         {

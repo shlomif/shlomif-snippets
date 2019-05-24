@@ -1,37 +1,36 @@
 use strict;
+use warnings;
 
 sub addbackslashes
 {
-	my $string = shift;
-	my $out = "";
-	my $char;
+    my $string = shift;
+    my $out    = "";
+    my $char;
 
-	foreach $char (split(//, $string))
-	{
-		if ($char =~ /[\$\\\"]/)
-		{
-			$out .= "\\";
-		}
-		$out .= $char;
-	}
-	return $out;
+    foreach $char ( split( //, $string ) )
+    {
+        if ( $char =~ /[\$\\\"]/ )
+        {
+            $out .= "\\";
+        }
+        $out .= $char;
+    }
+    return $out;
 }
 
-my $p_expr = & {
-	sub {
-		my $x = shift;
-		return
-		"eval {
+my $p_expr = &{
+    sub {
+        my $x = shift;
+        return "eval {
 			my \$local_self ;
 			\$local_self = sub {
 				&{$x}(\"" . addbackslashes($x) . "\");
 			};
 			&{\$local_self}();
 		}";
-	}
-	}
-(
-	"sub {
+    }
+    }(
+    "sub {
 		my \$x = shift;
 		return
 		\"eval {
@@ -42,31 +41,32 @@ my $p_expr = & {
 			&{\\\$local_self}();
 		}\";
 	}"
-);
+    );
 
-my ($a, $b, @array);
+my (@array);
 
-for($a=0;$a<50;$a++)
+for my $i ( 0 .. 50 )
 {
-	my $evaled;
+    $#array = -1;
+    my $evaled = $p_expr;
 
-	$evaled = $p_expr;
+    for my $j ( 0 .. $i - 1 )
+    {
+        $evaled = eval($evaled);
+        push @array, $evaled;
+    }
 
-	for($b=0;$b<$a;$b++)
-	{
-		$evaled = eval($evaled);
-		push @array, $evaled;
-	}
+    print "------------------------------\n";
+    print( ( "eval " x $i ) . "\$p_expr \n" );
+    print "------------------------------\n";
+    print $evaled;
 
-	print "------------------------------\n";
-	print (("eval " x $a) . "\$p_expr \n");
-	print "------------------------------\n";
-	print $evaled;
-
-	print "==============================\n\n\n\n";
+    print "==============================\n\n\n\n";
 }
 
-
-print (($array[5] eq $array[15]) ?
-	"They are the same." :
-	"They are not the same"), "\n";
+print(
+    ( $array[5] eq $array[15] )
+    ? "They are the same."
+    : "They are not the same"
+    ),
+    "\n";

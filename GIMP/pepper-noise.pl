@@ -9,19 +9,20 @@ use PDL;
 use PDL::Core;
 use Carp;
 
-sub sub2ind {
-  my $dims = shift;
-  $dims = [$dims->dims] if UNIVERSAL::isa($dims,'PDL');
-  croak "need dims array ref" unless ref $dims eq 'ARRAY';
-  my @args = @_;
-  croak "number of dims must not be less than number of arguments"
-    unless @args <= @$dims;
-  my $coord = $args[0]->copy;
-  for my $n (1..$#$dims)
-  {
-      $coord += $dims->[$n-1]*$args[$n];
-  }
-  return $coord;
+sub sub2ind
+{
+    my $dims = shift;
+    $dims = [ $dims->dims ] if UNIVERSAL::isa( $dims, 'PDL' );
+    croak "need dims array ref" unless ref $dims eq 'ARRAY';
+    my @args = @_;
+    croak "number of dims must not be less than number of arguments"
+        unless @args <= @$dims;
+    my $coord = $args[0]->copy;
+    for my $n ( 1 .. $#$dims )
+    {
+        $coord += $dims->[ $n - 1 ] * $args[$n];
+    }
+    return $coord;
 }
 
 #sub pepper_noise
@@ -32,39 +33,41 @@ sub sub2ind {
 
 Gimp::init();
 
-    my $filename = "/home/shlomi/Docs/lecture/Gimp/images/lena.png";
-    my $image = gimp_file_load($filename, $filename);
-    my $num_pixels = 100;
+my $filename   = "/home/shlomi/Docs/lecture/Gimp/images/lena.png";
+my $image      = gimp_file_load( $filename, $filename );
+my $num_pixels = 100;
 
-    my $drawable = $image->active_drawable();
+my $drawable = $image->active_drawable();
 
-    my $gdrawable = $drawable->get();
+my $gdrawable = $drawable->get();
 
-    my $height = $drawable->height();
-    my $width = $drawable->width();
+my $height = $drawable->height();
+my $width  = $drawable->width();
 
-    my @bounds = $drawable->bounds();
+my @bounds = $drawable->bounds();
 
-    my $src = new PixelRgn ($drawable,@bounds,0,0);
-    my $dst = new PixelRgn ($drawable,@bounds,1,1);
+my $src = new PixelRgn( $drawable, @bounds, 0, 0 );
+my $dst = new PixelRgn( $drawable, @bounds, 1, 1 );
 
-    print "1\n";
+print "1\n";
 
-    my $piddle = $src->data();
+my $piddle = $src->data();
 
-        print "2\n";
-    my $noise_x = floor(random(1,$num_pixels) * $width);
-    my $noise_y = floor(random(1,$num_pixels) * $height);
+print "2\n";
+my $noise_x = floor( random( 1, $num_pixels ) * $width );
+my $noise_y = floor( random( 1, $num_pixels ) * $height );
 
-    print join(",", dims($piddle)), "\n";
+print join( ",", dims($piddle) ), "\n";
 
-    my $noise_indexes = sub2ind($piddle, zeroes(1,$num_pixels), $noise_x, $noise_y);
+my $noise_indexes =
+    sub2ind( $piddle, zeroes( 1, $num_pixels ), $noise_x, $noise_y );
 
-    if (0)
+if (0)
+{
+    for ( my $i = 0 ; $i < $num_pixels ; ++$i )
     {
-    for(my $i=0;$i<$num_pixels;$i++)
-    {
-        if ($piddle->at(0, $noise_x->at(0, $i), $noise_y->at(0, $i)) == 0)
+        if ( $piddle->at( 0, $noise_x->at( 0, $i ), $noise_y->at( 0, $i ) ) ==
+            0 )
         {
         }
         else
@@ -74,16 +77,17 @@ Gimp::init();
     }
 }
 
-    print "3\n";
-    $piddle->flat->index($noise_indexes) .= zeroes(1, $num_pixels);
+print "3\n";
+$piddle->flat->index($noise_indexes) .= zeroes( 1, $num_pixels );
 
-    print "3.5\n";
+print "3.5\n";
 
-    if (0)
+if (0)
+{
+    for ( my $i = 0 ; $i < $num_pixels ; $i++ )
     {
-    for(my $i=0;$i<$num_pixels;$i++)
-    {
-        if ($piddle->at(0, $noise_x->at(0, $i), $noise_y->at(0, $i)) == 0)
+        if ( $piddle->at( 0, $noise_x->at( 0, $i ), $noise_y->at( 0, $i ) ) ==
+            0 )
         {
         }
         else
@@ -91,11 +95,12 @@ Gimp::init();
             print "Not good!";
         }
     }
-    }
+}
 
-    $dst->data($piddle);
+$dst->data($piddle);
 
-    print "4\n";
+print "4\n";
+
 # }
 
 =begin

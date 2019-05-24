@@ -5,22 +5,23 @@ use warnings;
 
 use Data::Dumper;
 
-    use Config;
+use Config;
 
-    if (!defined $Config{sig_name})
-    {
-        die "No sigs?";
-    }
+if ( !defined $Config{sig_name} )
+{
+    die "No sigs?";
+}
 
-    my (%signo, @signame);
+my ( %signo, @signame );
 
-    my $index = 0;
+my $index = 0;
 
-    foreach my $name (split(' ', $Config{sig_name})) {
-        $signo{$name} = $index;
-        $signame[$index] = $name;
+foreach my $name ( split( ' ', $Config{sig_name} ) )
+{
+    $signo{$name} = $index;
+    $signame[$index] = $name;
 
-        $index++;
-    }
+    ++$index;
+}
 
-print Dumper(\%signo, \@signame);
+print Dumper( \%signo, \@signame );

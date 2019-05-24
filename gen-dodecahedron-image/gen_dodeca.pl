@@ -4,6 +4,7 @@ use Vector;
 use POSIX;
 
 use strict;
+use warnings;
 
 local (*F);
 
