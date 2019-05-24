@@ -1,3 +1,17 @@
+;;; <h2 id="licence">Licence</h2>
+;;;
+;;; <p style="margin-left: 1em;">
+;;;   <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+;;;     <img src="$(ROOT)/images/CC-zero-1.0-88x31.png" alt="CC0" />
+;;;   </a>
+;;;   <br />
+;;;   To the extent possible under law, <a href="http://www.shlomifish.org/"><span>Shlomi Fish</span></a>
+;;;   has waived all copyright and related or neighbouring rights to
+;;;   <span><i>Lecture about Scheme and Lambda Calculus</i></span>.
+;;; This work is published from
+;;; <span>Israel</span>.
+;;; </p>
+
 (define zero (lambda (f) (lambda (x) x)))
 
 (define (church->int church)
