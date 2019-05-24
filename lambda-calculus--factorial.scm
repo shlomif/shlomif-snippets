@@ -21,13 +21,6 @@
 )
 (define lc_true  (lambda (x) (lambda (y) x)))
 (define lc_false (lambda (x) (lambda (y) y)))
-(define add
-    (lambda (n)
-        (lambda (m)
-            ((n succ) m)
-        )
-    )
-)
 
 (define lc_cons
     (lambda (mycar)
@@ -51,20 +44,6 @@
         (tuple lc_false)
     )
 )
-; We can evaluate it into:
-(define add
-    (lambda (m)
-        (lambda (n)
-            (lambda (f)
-                (lambda (x)
-                    ((m f)
-                        ((n f) x)
-                    )
-                )
-            )
-        )
-    )
-)
 
 ; Now let's try multiplication. Since a church numeral is basically about
 ; repeating something n times, we can repeat the other multiplicand N times.
@@ -75,26 +54,6 @@
             (lambda (f)
                 (m (n f))
             )
-        )
-    )
-)
-
-; Power: we can repeat the LC's mult m times
-
-(define power
-    (lambda (m)
-        (lambda (n)
-            ((n (mult m)) (succ zero))
-        )
-    )
-)
-
-; This, in turn can be simplified into:
-
-(define power
-    (lambda (m)
-        (lambda (n)
-            (n m)
         )
     )
 )
@@ -136,17 +95,6 @@
 
 ; Note that the pred of zero is zero, because there isn't -1 in church numerals
 
-; Subtraction is simply repeating pred m times
-
-(define subtract
-    (lambda (n)
-        (lambda (m)
-            ((m pred) n)
-        )
-    )
-)
-
-
 ; Now, how do we compare two Church numerals? We can subtract the
 ; first one from the second one. If the result is equal to zero, then the
 ; second one is greater or equal to the first.
@@ -157,16 +105,7 @@
     )
 )
 
-(define less-or-equal
-    (lambda (x)
-            (lambda (y)
-                    (is-zero? ((subtract x) y))
-            )
-    )
-)
-
-; The Y combinator is defined as follows:
-
+; The Y combinator:
 (define Y
     (lambda (f)
         (
@@ -183,11 +122,6 @@
 (define zero (lambda (f) (lambda (x) x)))
 (define one  (lambda (f) (lambda (x) (f x))))
 (define factorial (Y (lambda (f) (lambda (x) ((((is-zero? x) (lambda (no_use) one)) (lambda (no_use) ((mult x) (f (pred x))))) zero)))))
-; In a similar way and by using not we can define all other comparison
-; operators.
 
 (display (church->int (factorial (int->church 4))))
 (newline)
-
-; Division and modulo? For this we need the Y combinator.
-; Stay tuned...
