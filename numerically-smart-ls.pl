@@ -10,7 +10,7 @@
 # 4. Floaties are not handled very well.
 #
 # Written by Shlomi Fish, 2004
-# Distributed under the MIT X11 license. (practically public domain)
+# Distributed under the Expat license.
 #
 # Retrospectively, I can be somewhat smarter and simply find the greatest
 # common prefix of the strings, and then process the next character based
@@ -25,37 +25,40 @@ chomp(@files);
 
 sub my_split
 {
-    my $f = shift;
-    my @components = ($f =~ /((?:\d+)|(?:\D+))/g);
+    my $f          = shift;
+    my @components = ( $f =~ /((?:\d+)|(?:\D+))/g );
     return \@components;
 }
 
 sub my_compare
 {
     my @strings = @_;
-    my @comps = (map { my_split($_) } @strings);
-    my $digit = ($comps[0][0] =~ /^\d/)?1:0;
-    my $digit2 = ($comps[1][0] =~ /^\d/)?1:0;
-    if ($digit != $digit2)
+    my @comps   = ( map { my_split($_) } @strings );
+    my $digit   = ( $comps[0][0] =~ /^\d/ ) ? 1 : 0;
+    my $digit2  = ( $comps[1][0] =~ /^\d/ ) ? 1 : 0;
+    if ( $digit != $digit2 )
     {
-        return ($strings[0] cmp $strings[1]);
+        return ( $strings[0] cmp $strings[1] );
     }
-    my $i = 0;
-    for($i=0;
-        ($i<scalar(@{$comps[0]})) && ($i<scalar(@{$comps[1]}));
-        $i++,($digit^=0x1))
+    for (
+        my $i = 0 ;
+        ( $i < scalar( @{ $comps[0] } ) )
+            && ( $i < scalar( @{ $comps[1] } ) ) ;
+        ++$i, ( $digit ^= 0x1 )
+        )
     {
         my $side1 = $comps[0][$i];
         my $side2 = $comps[1][$i];
-        my $verdict = ($digit ? ($side1 <=> $side2) : ($side1 cmp $side2));
+        my $verdict =
+            ( $digit ? ( $side1 <=> $side2 ) : ( $side1 cmp $side2 ) );
         if ($verdict)
         {
             return $verdict;
         }
     }
-    return (length($strings[0]) <=> length($strings[1]));
+    return ( length( $strings[0] ) <=> length( $strings[1] ) );
 }
 
 # my_split($ARGV[0]);
-print (map { "$_\n" } sort { my_compare($a,$b) } @files);
+print( map { "$_\n" } sort { my_compare( $a, $b ) } @files );
 

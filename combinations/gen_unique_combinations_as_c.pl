@@ -5,7 +5,7 @@ use warnings;
 
 sub combi
 {
-    my ($ALPHABET, $prefix, $count) = @_;
+    my ( $ALPHABET, $prefix, $count ) = @_;
 
     print <<"EOF";
 #include <stdio.h>
@@ -26,10 +26,10 @@ int main()
 EOF
 
     my $code = '{ puts(stack); }';
-    for my $i (reverse 1 .. $count)
+    for my $i ( reverse 1 .. $count )
     {
-        $code = <<"EOF"
-for (const char * p$i = p@{[$i-1]};p$i< end;p$i++)
+        $code = <<"EOF";
+for (const char * p$i = p@{[$i-1]} ; p$i< end ; ++p$i)
 {
     stack[@{[$i-1]}] = *(p$i);
     $code
@@ -44,10 +44,10 @@ $code
 }
 EOF
 
-    return;
+        return;
 }
 
-combi([0 .. 9, 'A' .. 'E'], '', 11);
+combi( [ 0 .. 9, 'A' .. 'E' ], '', 11 );
 
 =head1 COPYRIGHT & LICENSE
 
