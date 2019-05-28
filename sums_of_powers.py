@@ -144,8 +144,8 @@ class IterSumTwo:
         self.q = q
 
 
-def my_iter_func(e, thresh, start_from):
-    it = IterSumTwo(e)
+def my_iter_func(exponent, wanted_dups_count, start_from):
+    it = IterSumTwo(exponent)
     it.skip(start_from)
     c = 0
     prevs = []
@@ -159,15 +159,15 @@ def my_iter_func(e, thresh, start_from):
         if n[0] == prevs[0][0]:
             prevs.append(n)
         else:
-            if len(prevs) >= thresh:
+            if len(prevs) >= wanted_dups_count:
                 yield ("result", (len(prevs),
                                   prevs[0][0], [(x, y) for z, x, y in prevs]))
             prevs = [n]
 
 
-def test_func(e, thresh, start_from):
+def test_func(exponent, wanted_dups_count, start_from):
     fh = open('sums_of_powers.log.txt', 'a')
-    it = my_iter_func(e, thresh, start_from)
+    it = my_iter_func(exponent, wanted_dups_count, start_from)
     for event in it:
         type_, content = event
         if type_ == "result":
@@ -177,4 +177,5 @@ def test_func(e, thresh, start_from):
 
 
 # test_func(3, 2, 0)
-test_func(4, 3, 208824111896687642177)
+
+test_func(4, 3, 268020050558211886897)
