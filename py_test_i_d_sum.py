@@ -14,7 +14,7 @@
 def check(d, n):
     sumleft = 0
     for i in range(1, d):
-        sumleft += (i*d**(n-1)+i**n)
+        sumleft += (i*d**(n-1)-i**n)
     sumright = 0
     for i in range(1, d+1):
         sumright += i*(i**n-(i-1)**n-d**(n-1))
