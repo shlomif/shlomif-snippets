@@ -4,21 +4,10 @@ use strict;
 use warnings;
 
 use SVG ();
-use Math::Trig;
-
-my $max_depth  = 50;
-my $proportion = 0.1;
 
 # TODO : Fix the case where $width != $height.
 my $width  = 300;
 my $height = $width;
-
-my $half_width  = $width * 0.5;
-my $half_height = $height * 0.5;
-
-# Calculate some constants
-my $angle      = rad2deg( atan2( $proportion, 1 - $proportion ) );
-my $size_ratio = sqrt( $proportion**2 + ( 1 - $proportion )**2 );
 
 my $svg = SVG->new( width => $width, height => $height, );
 
