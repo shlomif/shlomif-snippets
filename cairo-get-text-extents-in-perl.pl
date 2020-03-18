@@ -23,8 +23,6 @@ use warnings;
 use 5.014;
 use autodie;
 
-use Path::Tiny qw/ path tempdir tempfile cwd /;
-
 use Cairo ();
 
 my $surface = Cairo::ImageSurface->create( 'argb32', 2000, 1000 );
