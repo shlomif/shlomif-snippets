@@ -4,7 +4,9 @@ Mandelbrot set
 
 Compute the Mandelbrot fractal and plot it
 
-Based on https://scipy-lectures.org/intro/numpy/auto_examples/plot_mandelbrot.html#sphx-glr-download-intro-numpy-auto-examples-plot-mandelbrot-py
+Based on:
+
+https://scipy-lectures.org/intro/numpy/auto_examples/plot_mandelbrot.html
 
 under CC-BY 4.0 ( https://creativecommons.org/licenses/by/4.0/ )
 
@@ -15,12 +17,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import newaxis
 
+
 def compute_mandelbrot(N_max, some_threshold, nx, ny):
     # A grid of c-values
     x = np.linspace(-2, 1, nx)
     y = np.linspace(-1.5, 1.5, ny)
 
-    c = x[:,newaxis] + 1j*y[newaxis,:]
+    c = x[:, newaxis] + 1j*y[newaxis, :]
 
     # Mandelbrot iteration
 
@@ -31,6 +34,7 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
     mandelbrot_set = (abs(z) < some_threshold)
 
     return mandelbrot_set
+
 
 mandelbrot_set = compute_mandelbrot(50, 50., 601, 401)
 
