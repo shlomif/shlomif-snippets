@@ -27,7 +27,8 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
 
     # Mandelbrot iteration
     ret = np.zeros([nx, ny], dtype=np.int32)
-    mask = ret * 0
+    mask = np.zeros([nx, ny], dtype=np.bool)
+
     z = c
     for j in range(N_max):
         z = z**2 + c
@@ -35,7 +36,7 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
         z *= (np.logical_not(where))
         mask = np.logical_or(mask, where)
         ret += mask
-        print(np.where(ret == j-1))
+        # print(np.where(ret == j-1))
     return ret
 
     mandelbrot_set = (abs(z) < some_threshold)
@@ -43,7 +44,7 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
     return mandelbrot_set
 
 
-mandelbrot_set = compute_mandelbrot(256, 9., 601, 401) / 256
+mandelbrot_set = compute_mandelbrot(256, 2.2, 601, 401) / 256
 
 plt.imshow(mandelbrot_set.T, extent=[-2, 1, -1.5, 1.5])
 plt.gray()
