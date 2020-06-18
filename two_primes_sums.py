@@ -22,8 +22,10 @@ pairs = sum_walker.iterator_wrapper.Walker(counts=[2], iterator=primes())
 last = 0
 while True:
     result_sum, combis = next(pairs)
-    if len(combis) > last:
-        last = len(combis)
+    new = len(combis)
+    if new > last:
+        last = new
         print(
-            result_sum, ' = @', last, flush=True)
+            result_sum, 'can be written as a sum of two primes in',
+            last, 'ways', flush=True)
         # [[x[0].value, '+', x[1].value] for x in combis])
