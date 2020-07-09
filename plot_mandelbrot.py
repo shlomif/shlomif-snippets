@@ -49,7 +49,7 @@ def compute_mandelbrot(n_max, some_threshold, nx, ny):
     return mandelbrot_set
 
 
-mandelbrot_set = compute_mandelbrot(255, 2.2, 601, 401)
+mandelbrot_set = compute_mandelbrot(255, 2.2, 601, 401).astype('uint8')
 
 
 def foo(y):
@@ -60,8 +60,8 @@ def foo(y):
     return ret
 
 
-m = [foo(y) for y in mandelbrot_set]
-print(set([len(x) for x in m]))
+m = np.repeat(mandelbrot_set, 3, axis=1)
+print(set([min(x) for x in m]))
 # print(m)
 png.from_array(m, 'RGB').save("mandel.png")
 
@@ -77,7 +77,8 @@ subprocess.call(
          )
     ])
 
-mandelbrot_set /= 256
-plt.imshow(mandelbrot_set.T, extent=[-2, 1, -1.5, 1.5])
-plt.gray()
+def show():
+    mandelbrot_set /= 256
+    plt.imshow(mandelbrot_set.T, extent=[-2, 1, -1.5, 1.5])
+    plt.gray()
 plt.show()
