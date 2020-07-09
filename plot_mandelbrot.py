@@ -77,8 +77,9 @@ subprocess.call(
          )
     ])
 
-def show():
+
+def show(mandelbrot_set):
     mandelbrot_set /= 256
     plt.imshow(mandelbrot_set.T, extent=[-2, 1, -1.5, 1.5])
     plt.gray()
-plt.show()
+    plt.show()
