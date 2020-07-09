@@ -13,12 +13,17 @@ under CC-BY 4.0 ( https://creativecommons.org/licenses/by/4.0/ )
 Thanks!
 
 """
-import numpy as np
+import subprocess
+
 import matplotlib.pyplot as plt
+
+import numpy as np
 from numpy import newaxis
 
+import png
 
-def compute_mandelbrot(N_max, some_threshold, nx, ny):
+
+def compute_mandelbrot(n_max, some_threshold, nx, ny):
     # A grid of c-values
     x = np.linspace(-2, 1, nx)
     y = np.linspace(-1.5, 1.5, ny)
@@ -30,7 +35,7 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
     mask = np.zeros([nx, ny], dtype=np.bool)
 
     z = c
-    for j in range(N_max):
+    for j in range(n_max):
         z = z**2 + c
         where = (abs(z) > some_threshold)
         z *= (np.logical_not(where))
@@ -44,8 +49,35 @@ def compute_mandelbrot(N_max, some_threshold, nx, ny):
     return mandelbrot_set
 
 
-mandelbrot_set = compute_mandelbrot(256, 2.2, 601, 401) / 256
+mandelbrot_set = compute_mandelbrot(255, 2.2, 601, 401)
 
+
+def foo(y):
+    ret = []
+    for x in y:
+        for _ in range(3):
+            ret.append(int(x))
+    return ret
+
+
+m = [foo(y) for y in mandelbrot_set]
+print(set([len(x) for x in m]))
+# print(m)
+png.from_array(m, 'RGB').save("mandel.png")
+
+subprocess.call(
+    [
+        "/usr/bin/gimp",  "./mandel.png",
+        "--batch-interpreter=python-fu-eval",
+        "-b",
+        ('img = gimp.image_list()[0]\ndraw=img.active_drawable\n' +
+         'pdb.gimp_context_set_gradient("Tropical Colors")\n' +
+         'pdb.plug_in_gradmap(img, draw)\n' +
+         'pdb.gimp_file_save(img, draw, "mandel2.png", "mandel2.png")\n\n'
+         )
+    ])
+
+mandelbrot_set /= 256
 plt.imshow(mandelbrot_set.T, extent=[-2, 1, -1.5, 1.5])
 plt.gray()
 plt.show()
