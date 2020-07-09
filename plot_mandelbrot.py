@@ -73,7 +73,8 @@ subprocess.call(
         ('img = gimp.image_list()[0]\ndraw=img.active_drawable\n' +
          'pdb.gimp_context_set_gradient("Tropical Colors")\n' +
          'pdb.plug_in_gradmap(img, draw)\n' +
-         'pdb.gimp_file_save(img, draw, "mandel2.png", "mandel2.png")\n\n'
+         'pdb.gimp_file_save(img, draw, "mandel2.png", "mandel2.png")\n' +
+         'pdb.gimp_quit(1)\n'
          )
     ])
 
