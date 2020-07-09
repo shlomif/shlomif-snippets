@@ -62,21 +62,25 @@ def foo(y):
 
 m = np.repeat(mandelbrot_set, 3, axis=1)
 print(set([min(x) for x in m]))
+greyscale = "mandel.png"
+colored = "mandel_colored.png"
 # print(m)
-png.from_array(m, 'RGB').save("mandel.png")
+png.from_array(m, 'RGB').save(greyscale)
 
 subprocess.call(
     [
-        "/usr/bin/gimp",  "./mandel.png",
+        "/usr/bin/gimp",  greyscale,
         "--batch-interpreter=python-fu-eval",
         "-b",
         ('img = gimp.image_list()[0]\ndraw=img.active_drawable\n' +
          'pdb.gimp_context_set_gradient("Tropical Colors")\n' +
          'pdb.plug_in_gradmap(img, draw)\n' +
-         'pdb.gimp_file_save(img, draw, "mandel2.png", "mandel2.png")\n' +
+         'pdb.gimp_file_save(img, draw, "{colored}", "{colored}")\n' +
          'pdb.gimp_quit(1)\n'
-         )
+         ).format(colored=colored)
     ])
+
+subprocess.call(["gwenview", colored])
 
 
 def show(mandelbrot_set):
