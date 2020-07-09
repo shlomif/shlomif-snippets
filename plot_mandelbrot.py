@@ -70,6 +70,7 @@ png.from_array(m, 'RGB').save(greyscale)
 subprocess.call(
     [
         "/usr/bin/gimp",  greyscale,
+        "--no-interface",
         "--batch-interpreter=python-fu-eval",
         "-b",
         ('img = gimp.image_list()[0]\ndraw=img.active_drawable\n' +
