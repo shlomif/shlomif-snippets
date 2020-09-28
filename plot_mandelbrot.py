@@ -70,7 +70,8 @@ mandelbrot_set = compute_mandelbrot(
 
 m = np.repeat(mandelbrot_set, 3, axis=1)
 greyscale = "mandel.png"
-colored = "mandel_colored.png"
+# colored = "mandel_colored.png"
+colored = greyscale
 png.from_array(m, 'RGB').save(greyscale)
 
 subprocess.check_call(
