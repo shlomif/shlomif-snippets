@@ -28,7 +28,6 @@ def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
                        reals_range=(-2, 1),
                        imaginaries_range=(-1.5, 1.5),
                        ):
-    # A grid of c-values
     def _diff(r):
         return r[1]-r[0]
 
@@ -41,6 +40,7 @@ def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
         imaginaries_range[0], imaginaries_range[1], imaginaries_width
     )
 
+    # See: https://en.wikipedia.org/wiki/Mandelbrot_set
     c = x[newaxis, :] + 1j*y[:, newaxis]
 
     # Mandelbrot iteration
@@ -48,11 +48,12 @@ def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
     ret = np.zeros(dims, dtype=np.int32)
     mask = np.zeros(dims, dtype=np.bool)
 
-    z = c
+    f_z_val = c
     for j in range(iterations_count):
-        z = z**2 + c
-        where = (abs(z) > diverge_threshold)
-        z *= np.logical_not(where)
+        f_z_val = f_z_val**2 + c
+        where = (abs(f_z_val) > diverge_threshold)
+        # This is to avoid overflow warnings.
+        f_z_val *= np.logical_not(where)
         mask = np.logical_or(mask, where)
         ret += mask
     ret = ret * max_level // iterations_count
