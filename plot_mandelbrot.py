@@ -23,7 +23,7 @@ from numpy import newaxis
 import png
 
 
-def compute_mandelbrot(iterations_count, max_level, escape_threshold,
+def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
                        reals_width, imaginaries_width):
     # A grid of c-values
     x = np.linspace(-2, 1, reals_width)
@@ -39,7 +39,7 @@ def compute_mandelbrot(iterations_count, max_level, escape_threshold,
     z = c
     for j in range(iterations_count):
         z = z**2 + c
-        where = (abs(z) > escape_threshold)
+        where = (abs(z) > diverge_threshold)
         z *= (np.logical_not(where))
         mask = np.logical_or(mask, where)
         ret += mask
@@ -47,7 +47,7 @@ def compute_mandelbrot(iterations_count, max_level, escape_threshold,
     ret = ret * max_level // iterations_count
     return ret
 
-    mandelbrot_set = (abs(z) < escape_threshold)
+    mandelbrot_set = (abs(z) < diverge_threshold)
 
     return mandelbrot_set
 
@@ -55,7 +55,7 @@ def compute_mandelbrot(iterations_count, max_level, escape_threshold,
 mandelbrot_set = compute_mandelbrot(
     iterations_count=80,
     max_level=255,
-    escape_threshold=2.2,
+    diverge_threshold=2.2,
     reals_width=601,
     imaginaries_width=401,
 ).astype('uint8')
