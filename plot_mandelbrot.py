@@ -23,33 +23,41 @@ from numpy import newaxis
 import png
 
 
-def compute_mandelbrot(n_max, some_threshold, nx, ny):
+def compute_mandelbrot(iterations_count, max_level, escape_threshold,
+                       reals_width, imaginaries_width):
     # A grid of c-values
-    x = np.linspace(-2, 1, nx)
-    y = np.linspace(-1.5, 1.5, ny)
+    x = np.linspace(-2, 1, reals_width)
+    y = np.linspace(-1.5, 1.5, imaginaries_width)
 
     c = x[:, newaxis] + 1j*y[newaxis, :]
 
     # Mandelbrot iteration
-    ret = np.zeros([nx, ny], dtype=np.int32)
-    mask = np.zeros([nx, ny], dtype=np.bool)
+    ret = np.zeros([reals_width, imaginaries_width], dtype=np.int32)
+    mask = np.zeros([reals_width, imaginaries_width], dtype=np.bool)
 
     z = c
-    for j in range(n_max):
+    for j in range(iterations_count):
         z = z**2 + c
-        where = (abs(z) > some_threshold)
+        where = (abs(z) > escape_threshold)
         z *= (np.logical_not(where))
         mask = np.logical_or(mask, where)
         ret += mask
         # print(np.where(ret == j-1))
+    ret = ret * max_level // iterations_count
     return ret
 
-    mandelbrot_set = (abs(z) < some_threshold)
+    mandelbrot_set = (abs(z) < escape_threshold)
 
     return mandelbrot_set
 
 
-mandelbrot_set = compute_mandelbrot(255, 2.2, 601, 401).astype('uint8')
+mandelbrot_set = compute_mandelbrot(
+    iterations_count=80,
+    max_level=255,
+    escape_threshold=2.2,
+    reals_width=601,
+    imaginaries_width=401,
+).astype('uint8')
 
 
 def foo(y):
