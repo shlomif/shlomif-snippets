@@ -34,7 +34,7 @@ def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
 
     if imaginaries_width is None:
         imaginaries_width = int(
-            _diff(reals_range) * reals_width // _diff(imaginaries_range)
+            _diff(reals_range) * reals_width / _diff(imaginaries_range)
         )
     x = np.linspace(reals_range[0], reals_range[1], reals_width)
     y = np.linspace(
