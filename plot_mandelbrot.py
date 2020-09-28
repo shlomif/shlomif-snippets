@@ -52,16 +52,11 @@ def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
     for j in range(iterations_count):
         z = z**2 + c
         where = (abs(z) > diverge_threshold)
-        z *= (np.logical_not(where))
+        z *= np.logical_not(where)
         mask = np.logical_or(mask, where)
         ret += mask
-        # print(np.where(ret == j-1))
     ret = ret * max_level // iterations_count
     return ret
-
-    mandelbrot_set = (abs(z) < diverge_threshold)
-
-    return mandelbrot_set
 
 
 mandelbrot_set = compute_mandelbrot(
@@ -72,19 +67,9 @@ mandelbrot_set = compute_mandelbrot(
 ).astype('uint8')
 
 
-def foo(y):
-    ret = []
-    for x in y:
-        for _ in range(3):
-            ret.append(int(x))
-    return ret
-
-
 m = np.repeat(mandelbrot_set, 3, axis=1)
-print(set([min(x) for x in m]))
 greyscale = "mandel.png"
 colored = "mandel_colored.png"
-# print(m)
 png.from_array(m, 'RGB').save(greyscale)
 
 subprocess.call(
