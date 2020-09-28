@@ -24,17 +24,22 @@ import png
 
 
 def compute_mandelbrot(iterations_count, max_level, diverge_threshold,
-                       reals_width, imaginaries_width):
+                       reals_width, imaginaries_width=None,
+                       reals_range=(-2, 1),
+                       imaginaries_range=(-1.5, 1.5),
+                       ):
     # A grid of c-values
-    min_real = -2
-    max_real = 1
-    min_im = -1.5
-    max_im = 1.5
-    imaginaries_width = int(
-        (max_real-min_real) * reals_width // (max_im - min_im)
+    def _diff(r):
+        return r[1]-r[0]
+
+    if imaginaries_width is None:
+        imaginaries_width = int(
+            _diff(reals_range) * reals_width // _diff(imaginaries_range)
+        )
+    x = np.linspace(reals_range[0], reals_range[1], reals_width)
+    y = np.linspace(
+        imaginaries_range[0], imaginaries_range[1], imaginaries_width
     )
-    x = np.linspace(min_real, max_real, reals_width)
-    y = np.linspace(min_im, max_im, imaginaries_width)
 
     c = x[newaxis, :] + 1j*y[:, newaxis]
 
@@ -63,8 +68,7 @@ mandelbrot_set = compute_mandelbrot(
     iterations_count=80,
     max_level=255,
     diverge_threshold=2.2,
-    reals_width=601,
-    imaginaries_width=401,
+    reals_width=600,
 ).astype('uint8')
 
 
