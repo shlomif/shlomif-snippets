@@ -72,9 +72,10 @@ greyscale = "mandel.png"
 colored = "mandel_colored.png"
 png.from_array(m, 'RGB').save(greyscale)
 
-subprocess.call(
+subprocess.check_call(
     [
-        "/usr/bin/gimp",  greyscale,
+        "gimp",  greyscale,
+        # "gimp-2.99",  greyscale,
         "--no-interface",
         "--batch-interpreter=python-fu-eval",
         "-b",
@@ -86,7 +87,7 @@ subprocess.call(
          ).format(colored=colored)
     ])
 
-subprocess.call(["gwenview", colored])
+subprocess.check_call(["gwenview", colored])
 
 
 def show(mandelbrot_set):
