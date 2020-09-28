@@ -29,11 +29,12 @@ def compute_mandelbrot(iterations_count, max_level, escape_threshold,
     x = np.linspace(-2, 1, reals_width)
     y = np.linspace(-1.5, 1.5, imaginaries_width)
 
-    c = x[:, newaxis] + 1j*y[newaxis, :]
+    c = x[newaxis, :] + 1j*y[:, newaxis]
 
     # Mandelbrot iteration
-    ret = np.zeros([reals_width, imaginaries_width], dtype=np.int32)
-    mask = np.zeros([reals_width, imaginaries_width], dtype=np.bool)
+    dims = (imaginaries_width, reals_width)
+    ret = np.zeros(dims, dtype=np.int32)
+    mask = np.zeros(dims, dtype=np.bool)
 
     z = c
     for j in range(iterations_count):
