@@ -69,27 +69,27 @@ mandelbrot_set = compute_mandelbrot(
 
 
 m = np.repeat(mandelbrot_set, 3, axis=1)
-greyscale = "mandel.png"
-# colored = "mandel_colored.png"
-colored = greyscale
-png.from_array(m, 'RGB').save(greyscale)
+greyscale_fn = "mandel.png"
+# colored_fn = "mandel_colored.png"
+colored_fn = greyscale_fn
+png.from_array(m, 'RGB').save(greyscale_fn)
 
 subprocess.check_call(
     [
-        "gimp",  greyscale,
-        # "gimp-2.99",  greyscale,
+        "gimp",  greyscale_fn,
+        # "gimp-2.99",  greyscale_fn,
         "--no-interface",
         "--batch-interpreter=python-fu-eval",
         "-b",
         ('img = gimp.image_list()[0]\ndraw=img.active_drawable\n' +
          'pdb.gimp_context_set_gradient("Tropical Colors")\n' +
          'pdb.plug_in_gradmap(img, draw)\n' +
-         'pdb.gimp_file_save(img, draw, "{colored}", "{colored}")\n' +
+         'pdb.gimp_file_save(img, draw, "{colored_fn}", "{colored_fn}")\n' +
          'pdb.gimp_quit(1)\n'
-         ).format(colored=colored)
+         ).format(colored_fn=colored_fn)
     ])
 
-subprocess.check_call(["gwenview", colored])
+subprocess.check_call(["gwenview", colored_fn])
 
 
 def show(mandelbrot_set):
