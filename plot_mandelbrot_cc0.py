@@ -1,7 +1,7 @@
 # mandel - a function to generate the Mandelbrot Set.
 # Written by Shlomi Fish, 2001
 #
-# This file is under the public domain.
+# This file is under the CC0 / public domain.
 
 import subprocess
 
