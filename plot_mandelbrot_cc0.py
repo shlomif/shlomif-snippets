@@ -15,19 +15,19 @@ def mandel(x=100, y=100, steps=20, init_value=0):
     # Generate the coordinates in the complex plane
     X, Y = np.meshgrid(xx, yy, indexing='ij')
     # Combine them into a matrix of complex numbers
-    Z = X+np.j*Y
+    Z = X+1j*Y
     # Retrieve the dimensions of Z
-    x_len, y_len = Z.shape
+    x_len, y_len = zs = Z.shape
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
-    value = np.ones(x_len, y_len) * init_value
+    value = np.ones(zs, dtype=complex) * init_value
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    ret = np.zeros(x_len, y_len)
+    ret = np.zeros(zs, dtype=np.uint)
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
-    mask = np.zeros(x_len, y_len)
+    mask = np.zeros(zs, dtype=bool)
 
     # Perform the check "steps" times
     for step in range(steps):
@@ -54,3 +54,6 @@ def mandel(x=100, y=100, steps=20, init_value=0):
 
     # Now ret is ready for prime time so we return it.
     return ret
+
+
+print(mandel())
