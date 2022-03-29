@@ -5,6 +5,8 @@
 
 import numpy as np
 
+import png
+
 
 # Assign some default values to the parameters
 # nargin is an internal Matlab variable that specifies how many
@@ -38,6 +40,7 @@ def mandel(x=100, y=100, steps=20, init_value=0):
         # of the same size.
         # (regular * indicates matrix multiplication)
         value = (value * value) + Z
+        assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
@@ -56,4 +59,10 @@ def mandel(x=100, y=100, steps=20, init_value=0):
     return ret
 
 
-print(mandel())
+mandelbrot_set = mandel(steps=255)
+mandelbrot_set = mandelbrot_set.astype('uint8')
+m = np.repeat(mandelbrot_set, 3, axis=1)
+greyscale_fn = "mandel.png"
+# colored_fn = "mandel_colored.png"
+colored_fn = greyscale_fn
+png.from_array(m, 'RGB').save(greyscale_fn)
