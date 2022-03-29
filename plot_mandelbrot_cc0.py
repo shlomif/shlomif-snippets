@@ -11,7 +11,7 @@ import png
 # Assign some default values to the parameters
 # nargin is an internal Matlab variable that specifies how many
 # parameters were passed to the function.
-def mandel(x=100, y=100, steps=20, init_value=0):
+def mandel(x=640, y=640, steps=20, init_value=0, max_level=255):
     xx = np.linspace(-2, 2, x)
     yy = np.linspace(-2, 2, y)
     # Generate the coordinates in the complex plane
@@ -40,7 +40,7 @@ def mandel(x=100, y=100, steps=20, init_value=0):
         # of the same size.
         # (regular * indicates matrix multiplication)
         value = (value * value) + Z
-        assert value.any()
+        # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
@@ -56,10 +56,11 @@ def mandel(x=100, y=100, steps=20, init_value=0):
         value = value * np.logical_not(current_mask)
 
     # Now ret is ready for prime time so we return it.
+    ret = ret * max_level // steps
     return ret
 
 
-mandelbrot_set = mandel(steps=255)
+mandelbrot_set = mandel(max_level=255, steps=255)
 mandelbrot_set = mandelbrot_set.astype('uint8')
 m = np.repeat(mandelbrot_set, 3, axis=1)
 greyscale_fn = "mandel.png"
