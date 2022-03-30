@@ -62,6 +62,7 @@ def mandel(x=640, y=640, num_steps=20, init_value=0, max_level=255):
 mandelbrot_set = mandel(max_level=255, num_steps=255)
 mandelbrot_set = mandelbrot_set.astype('uint8')
 m = np.repeat(mandelbrot_set, 3, axis=1)
+gradient = "Tropical Colors"
 greyscale_fn = "mandel.png"
 # colored_fn = "mandel_colored.png"
 colored_fn = greyscale_fn
@@ -76,11 +77,14 @@ subprocess.check_call(
         "-b",
         ('img = gimp.image_list()[0]\n' +
          'draw=img.active_drawable\n' +
-         'pdb.gimp_context_set_gradient("Tropical Colors")\n' +
+         'pdb.gimp_context_set_gradient("{gradient}")\n' +
          'pdb.plug_in_gradmap(img, draw)\n' +
          'pdb.gimp_file_save(img, draw, "{colored_fn}", "{colored_fn}")\n' +
          'pdb.gimp_quit(1)\n'
-         ).format(colored_fn=colored_fn)
+         ).format(
+             colored_fn=colored_fn,
+             gradient=gradient,
+         )
     ]
 )
 
