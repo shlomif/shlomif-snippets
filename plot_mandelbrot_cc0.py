@@ -15,7 +15,7 @@ def mandel(x=640, y=640, num_steps=20, init_value=0, max_level=255):
     xx = np.linspace(-2, 2, x)
     yy = np.linspace(-2, 2, y)
     # Generate the coordinates in the complex plane
-    X, Y = np.meshgrid(xx, yy, indexing='ij')
+    Y, X = np.meshgrid(xx, yy, indexing='ij')
     # Combine them into a matrix of complex numbers
     Z = X + 1j * Y
     # Retrieve the dimensions of Z
