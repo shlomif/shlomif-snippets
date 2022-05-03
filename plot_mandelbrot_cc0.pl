@@ -9,20 +9,39 @@ use PDL;
 # import numpy as np
 # import png
 
-
 # Assign some default values to the parameters
+sub _linspace
+{
+    my ( $aa, $bb, $n ) = @_;
+
+    return zeroes($n)->xlinvals( $aa, $bb );
+}
+
+sub _meshgrid
+{
+    my ( $xx, $yy, $n ) = @_;
+    my $x = $xx x ones( $yy->dims() )->transpose();
+    my $y = $yy->transpose() x ones( $xx->dims() );
+    return ( $x, $y );
+}
+
 sub mandel
 {
-my ($args)=@_;
-my $x = ($args->{'x'} // 640);
- my $y = ($args->{'y'} // 640);
- my $num_steps = ($args->{'num_steps'} // 20);
- my $init_value = ($args->{'init_value'} // 0);
- my $max_level = ($args->{'max_level'} // 255);
-    xx = np.linspace(-2, 2, x)
-    yy = np.linspace(-2, 2, y)
+    my ($args)     = @_;
+    my $x          = ( $args->{'x'}          // 640 );
+    my $y          = ( $args->{'y'}          // 640 );
+    my $num_steps  = ( $args->{'num_steps'}  // 20 );
+    my $init_value = ( $args->{'init_value'} // 0 );
+    my $max_level  = ( $args->{'max_level'}  // 255 );
+    my $xx         = _linspace( -2, 2, $x );
+    my $yy         = _linspace( -2, 2, $y );
+
     # Generate the coordinates in the complex plane
-    Y, X = np.meshgrid(xx, yy, indexing='ij')
+    my ( $Y, $X ) = _meshgrid( $xx, $yy, );
+    return;
+
+=begin foo
+
     # Combine them into a matrix of complex numbers
     Z = X + 1j * Y
     # Retrieve the dimensions of Z
@@ -64,9 +83,16 @@ my $x = ($args->{'x'} // 640);
     # Now ret is ready for prime time so we return it.
     ret = (ret * max_level) // num_steps
     return ret
+
+=end removed
+=cut
+
 }
 
-mandelbrot_set = mandel(max_level=255, num_steps=255)
+my $mandelbrot_set = mandel( { max_level => 255, num_steps => 255, } );
+
+=begin removed
+
 mandelbrot_set = mandelbrot_set.astype('uint8')
 m = np.repeat(mandelbrot_set, 3, axis=1)
 gradient = "Tropical Colors"
@@ -96,3 +122,4 @@ subprocess.check_call(
 )
 
 subprocess.check_call(["gwenview", colored_fn])
+=cut
