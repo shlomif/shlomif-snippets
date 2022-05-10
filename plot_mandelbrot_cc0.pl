@@ -38,14 +38,16 @@ sub mandel
 
     # Generate the coordinates in the complex plane
     my ( $Y, $X ) = _meshgrid( $xx, $yy, );
+
+    # Combine them into a matrix of complex numbers
+    my $Z = $X + pdl('i') * $Y;
+
+    # Retrieve the dimensions of Z
+    my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
     return;
 
 =begin foo
 
-    # Combine them into a matrix of complex numbers
-    Z = X + 1j * Y
-    # Retrieve the dimensions of Z
-    x_len, y_len = zs = Z.shape
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
