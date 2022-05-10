@@ -45,15 +45,17 @@ sub mandel
     # Retrieve the dimensions of Z
     my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
 
-=begin foo
-
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
-    value = np.ones(zs, dtype=complex) * init_value
+    my $value = ones(@zs) * $init_value;
+
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    ret = np.zeros(zs, dtype=np.uint)
+    my $ret = zeros(@zs);    # , dtype=np.uint)
+
+=begin foo
+
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
     mask = np.zeros(zs, dtype=bool)
