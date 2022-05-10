@@ -66,19 +66,21 @@ sub mandel
         # of the same size.
         $value = ( $value * $value ) + $Z;
 
-=begin foo
-
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
-        current_mask = (abs(value) > 2.0)
+        my $current_mask = ( abs($value) > 2.0 );
+
         # Update the mask. We use "or" in order to avoid a situation where
         # 1 and 1 become two or so.
-        mask = np.logical_or(mask, current_mask)
+        $mask |= $current_mask;
+
         # Upgrade the points in the mask to a greater value in the returned
         # Mandelbrot-map.
-        ret += mask
+        $ret += $mask;
+
+=begin foo
         # Zero the points that have overflowed, so they will not propagate
         # to infinity.
         value *= np.logical_not(current_mask)
