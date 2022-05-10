@@ -44,7 +44,6 @@ sub mandel
 
     # Retrieve the dimensions of Z
     my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
-    return;
 
 =begin foo
 
@@ -88,6 +87,8 @@ sub mandel
 
 =end removed
 =cut
+
+    return;
 
 }
 
