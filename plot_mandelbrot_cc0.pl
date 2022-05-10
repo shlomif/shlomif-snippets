@@ -80,22 +80,14 @@ sub mandel
         # Mandelbrot-map.
         $ret += $mask;
 
-=begin foo
         # Zero the points that have overflowed, so they will not propagate
         # to infinity.
-        value *= np.logical_not(current_mask)
-
-    # Now ret is ready for prime time so we return it.
-    ret = (ret * max_level) // num_steps
-    return ret
-
-=end removed
-=cut
-
+        $value *= ~($current_mask);
     }
 
-    return;
-
+    # Now ret is ready for prime time so we return it.
+    $ret = int( ( $ret * $max_level ) / $num_steps );
+    return $ret;
 }
 
 my $mandelbrot_set = mandel( { max_level => 255, num_steps => 255, } );
