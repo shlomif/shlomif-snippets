@@ -53,21 +53,21 @@ sub mandel
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
     my $ret = zeros(@zs);    # , dtype=np.uint)
+        # The mask which indicates which points have already overflowed, is set
+        # to zero, to indicate that none have so far.
+    my $mask = zeros(@zs);    # , dtype=bool)
 
-=begin foo
-
-    # The mask which indicates which points have already overflowed, is set
-    # to zero, to indicate that none have so far.
-    mask = np.zeros(zs, dtype=bool)
-
-    # Perform the check "num_steps" times
-    for step in range(num_steps):
+    foreach my $step ( 1 .. $num_steps )
+    {
         # For every point with a mandel value of "v" and a coordinate of "z"
         # perform  v <- (v ^ 2) + z
         #
         # * is an element-by-element multiplication of two matrixes
         # of the same size.
-        value = (value * value) + Z
+        $value = ( $value * $value ) + $Z;
+
+=begin foo
+
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
@@ -89,6 +89,8 @@ sub mandel
 
 =end removed
 =cut
+
+    }
 
     return;
 
