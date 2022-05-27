@@ -49,6 +49,7 @@ sub mandel
 
     # Combine them into a matrix of complex numbers
     my $Z = $X + pdl('i') * $Y;
+    say "Z:", $Z->info;
 
     # Retrieve the dimensions of Z
     my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
@@ -56,14 +57,14 @@ sub mandel
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
-    my $value = ones(@zs) * $init_value;
+    my $value = ones( cdouble(), @zs ) * $init_value;
 
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    my $ret = zeros(@zs);    # , dtype=np.uint)
+    my $ret = zeros( ushort(), @zs );    # , dtype=np.uint)
         # The mask which indicates which points have already overflowed, is set
         # to zero, to indicate that none have so far.
-    my $mask = zeros(@zs);    # , dtype=bool)
+    my $mask = zeros( byte(), @zs );    # , dtype=bool)
 
     foreach my $step ( 1 .. $num_steps )
     {
@@ -105,7 +106,9 @@ sub mandel
 
 my $mandelbrot_set = mandel( { max_level => 255, num_steps => 20, } );
 
-wimage( $mandelbrot_set, "mandelperl.bmp" );
+my $greyscale_fn = "mandelperl.bmp";
+wimage( $mandelbrot_set, $greyscale_fn );
+system( "gwenview", $greyscale_fn );
 
 =begin removed
 
