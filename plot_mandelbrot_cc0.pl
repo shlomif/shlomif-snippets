@@ -42,10 +42,10 @@ sub mandel
     my $yy         = _linspace( -2, 2, $y );
 
     # Generate the coordinates in the complex plane
-    my ( $Y, $X ) = _meshgrid( $xx, $yy, );
-    say $X->at(0,90);
+    my ( $X, $Y ) = _meshgrid( $xx, $yy, );
+    say $X->at( 0, 90 );
     say $Y->info;
-    say $Y->at(90,0);
+    say $Y->at( 90, 0 );
 
     # Combine them into a matrix of complex numbers
     my $Z = $X + pdl('i') * $Y;
