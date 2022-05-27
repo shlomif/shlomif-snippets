@@ -3,6 +3,10 @@
 #
 # This file is under the CC0 / public domain.
 
+use strict;
+use warnings;
+use 5.014;
+
 use PDL;
 use PDL::IO::Image qw/ wimage /;
 
@@ -21,7 +25,7 @@ sub _linspace
 sub _meshgrid
 {
     my ( $xx, $yy, $n ) = @_;
-    my $x = $xx x ones( $yy->dims() )->transpose();
+    my $x = ones( $yy->dims() )->transpose() x $xx;
     my $y = $yy->transpose() x ones( $xx->dims() );
     return ( $x, $y );
 }
@@ -39,6 +43,9 @@ sub mandel
 
     # Generate the coordinates in the complex plane
     my ( $Y, $X ) = _meshgrid( $xx, $yy, );
+    say $X->at(0,90);
+    say $Y->info;
+    say $Y->at(90,0);
 
     # Combine them into a matrix of complex numbers
     my $Z = $X + pdl('i') * $Y;
@@ -60,6 +67,8 @@ sub mandel
 
     foreach my $step ( 1 .. $num_steps )
     {
+        print "step=$step ", $ret->info, "\n";
+
         # For every point with a mandel value of "v" and a coordinate of "z"
         # perform  v <- (v ^ 2) + z
         #
@@ -87,14 +96,14 @@ sub mandel
     }
 
     # Now ret is ready for prime time so we return it.
-    die "end1" if not $ret->at(0, 0);
-    $ret = (( ( $ret * $max_level ) / $num_steps )->ushort);
-    die "end2" if not $ret->at(0, 0);
+    die "end1" if not $ret->at( 0, 0 );
+    $ret = ( ( ( $ret * $max_level ) / $num_steps )->ushort );
+    die "end2" if not $ret->at( 0, 0 );
     $ret = $ret->byte();
     return $ret;
 }
 
-my $mandelbrot_set = mandel( { max_level => 255, num_steps => 255, } );
+my $mandelbrot_set = mandel( { max_level => 255, num_steps => 20, } );
 
 wimage( $mandelbrot_set, "mandelperl.bmp" );
 
