@@ -4,6 +4,7 @@
 # This file is under the CC0 / public domain.
 
 use PDL;
+use PDL::IO::Image qw/ wimage /;
 
 # import subprocess
 # import numpy as np
@@ -86,11 +87,16 @@ sub mandel
     }
 
     # Now ret is ready for prime time so we return it.
-    $ret = int( ( $ret * $max_level ) / $num_steps );
+    die "end1" if not $ret->at(0, 0);
+    $ret = (( ( $ret * $max_level ) / $num_steps )->ushort);
+    die "end2" if not $ret->at(0, 0);
+    $ret = $ret->byte();
     return $ret;
 }
 
 my $mandelbrot_set = mandel( { max_level => 255, num_steps => 255, } );
+
+wimage( $mandelbrot_set, "mandelperl.bmp" );
 
 =begin removed
 
