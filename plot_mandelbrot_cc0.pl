@@ -52,7 +52,8 @@ sub mandel
     say "Z:", $Z->info;
 
     # Retrieve the dimensions of Z
-    my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
+    # my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
+    ( my @zs ) = $Z->dims();
 
     # The length in the x direction
     # The length in the y direction
