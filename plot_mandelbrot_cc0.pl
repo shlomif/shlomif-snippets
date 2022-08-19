@@ -57,6 +57,7 @@ sub mandel
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
     my $ret = zeros( ushort(), @zs );
+
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
     my $mask = zeros( byte(), @zs );
