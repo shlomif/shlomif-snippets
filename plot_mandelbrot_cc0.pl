@@ -10,10 +10,6 @@ use 5.014;
 use PDL;
 use PDL::IO::Image qw/ wimage /;
 
-# import subprocess
-# import numpy as np
-# import png
-
 # Assign some default values to the parameters
 sub _linspace
 {
@@ -55,17 +51,15 @@ sub mandel
     # my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
     ( my @zs ) = $Z->dims();
 
-    # The length in the x direction
-    # The length in the y direction
     # value is initialized to init_value in every point of the plane
     my $value = ones( cdouble(), @zs ) * $init_value;
 
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    my $ret = zeros( ushort(), @zs );    # , dtype=np.uint)
-        # The mask which indicates which points have already overflowed, is set
-        # to zero, to indicate that none have so far.
-    my $mask = zeros( byte(), @zs );    # , dtype=bool)
+    my $ret = zeros( ushort(), @zs );
+    # The mask which indicates which points have already overflowed, is set
+    # to zero, to indicate that none have so far.
+    my $mask = zeros( byte(), @zs );
 
     foreach my $step ( 1 .. $num_steps )
     {
