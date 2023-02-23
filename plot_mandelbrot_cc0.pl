@@ -24,7 +24,11 @@ sub _linspace
 sub _meshgrid
 {
     my ( $xx, $yy, $n ) = @_;
-    my $x = ones( $yy->dims() )->transpose() x $xx;
+
+    # my $x2  = ones( $yy->dims() )->transpose() x $xx;
+    my $x = $xx->dummy( 1, ( $yy->dims() )[0] );
+
+    # say $x == $x2;
     my $y = $yy->transpose() x ones( $xx->dims() );
     return ( $x, $y );
 }
