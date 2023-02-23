@@ -29,7 +29,9 @@ sub _meshgrid
     my $x = $xx->dummy( 1, ( $yy->dims() )[0] );
 
     # say $x == $x2;
-    my $y = $yy->transpose() x ones( $xx->dims() );
+    # my $y2 = $yy->transpose() x ones( $xx->dims() );
+    my $y = $yy->dummy( 0, ( $xx->dims() )[0] );
+
     return ( $x, $y );
 }
 
