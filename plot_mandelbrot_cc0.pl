@@ -8,7 +8,10 @@ use warnings;
 use 5.014;
 
 use PDL;
-use PDL::IO::Image qw/ wimage /;
+
+# use PDL::IO::Image qw/ wimage /;
+# use PDL::IO qw/ wimage /;
+use PDL::IO::FastRaw qw/ writefraw /;
 
 # Assign some default values to the parameters
 sub _linspace
@@ -97,13 +100,23 @@ sub mandel
     $ret = ( ( ( $ret * $max_level ) / $num_steps )->ushort );
     die "end2" if not $ret->at( 0, 0 );
     $ret = $ret->byte();
-    return $ret;
+    my $r = +{};
+    ( $r->{r_width}, $r->{i_height} ) = @zs;
+    $r->{filename} =
+        sprintf( "f_rw=%lu_iw=%lu.img", $r->{r_width}, $r->{i_height} );
+    writefraw( $ret, $r->{filename} );    # write a raw file
+    return $r;
 }
 
-my $mandelbrot_set = mandel( { max_level => 255, num_steps => 20, } );
+# my $mandelbrot_set = mandel( { max_level => 255, num_steps => 20, } );
+my $ret = mandel( { max_level => 255, num_steps => 20, } );
 
 my $greyscale_fn = "mandelperl.bmp";
-wimage( $mandelbrot_set, $greyscale_fn );
+
+# wimage( $mandelbrot_set, $greyscale_fn );
+my $command = sprintf( "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
+    $ret->{r_width}, $ret->{i_height}, $ret->{filename}, $greyscale_fn );
+system($command);
 system( "gwenview", $greyscale_fn );
 
 =begin removed
