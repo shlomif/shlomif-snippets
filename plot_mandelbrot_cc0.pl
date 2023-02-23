@@ -21,16 +21,23 @@ sub _linspace
     return zeroes($n)->xlinvals( $aa, $bb );
 }
 
+sub _len
+{
+    my ($vec) = @_;
+
+    return +( $vec->dims() )[0];
+}
+
 sub _meshgrid
 {
     my ( $xx, $yy, $n ) = @_;
 
     # my $x2  = ones( $yy->dims() )->transpose() x $xx;
-    my $x = $xx->dummy( 1, ( $yy->dims() )[0] );
+    my $x = $xx->dummy( 1, _len($yy) );
 
     # say $x == $x2;
     # my $y2 = $yy->transpose() x ones( $xx->dims() );
-    my $y = $yy->dummy( 0, ( $xx->dims() )[0] );
+    my $y = $yy->dummy( 0, _len($xx) );
 
     return ( $x, $y );
 }
