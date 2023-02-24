@@ -125,15 +125,15 @@ sub mandel
 
 sub example
 {
-    my $mandel = mandel( { max_level => 255, num_steps => 80, } );
+    my $mandel_ret = mandel( { max_level => 255, num_steps => 80, } );
 
     my $greyscale_fn = "mandelperl.bmp";
 
     # wimage( $mandelbrot_set, $greyscale_fn );
     my $command = sprintf(
         "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
-        $mandel->{r_width},  $mandel->{i_height},
-        $mandel->{filename}, $greyscale_fn
+        $mandel_ret->{r_width},  $mandel_ret->{i_height},
+        $mandel_ret->{filename}, $greyscale_fn
     );
     system($command);
     system( "gwenview", $greyscale_fn );
