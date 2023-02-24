@@ -83,7 +83,14 @@ sub mandel
         #
         # * is an element-by-element multiplication of two matrixes
         # of the same size.
-        $value = ( $value * $value ) + $Z;
+        if (0)
+        {
+            $value = ( $value * $value ) + $Z;
+        }
+        else
+        {
+            ( $value *= $value ) += $Z;
+        }
 
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
@@ -118,7 +125,7 @@ sub mandel
 
 sub example
 {
-    my $mandel = mandel( { max_level => 255, num_steps => 20, } );
+    my $mandel = mandel( { max_level => 255, num_steps => 80, } );
 
     my $greyscale_fn = "mandelperl.bmp";
 
