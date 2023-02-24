@@ -13,7 +13,6 @@ use PDL;
 # use PDL::IO qw/ wimage /;
 use PDL::IO::FastRaw qw/ writefraw /;
 
-# Assign some default values to the parameters
 sub _linspace
 {
     my ( $aa, $bb, $n ) = @_;
@@ -35,7 +34,6 @@ sub _meshgrid
     # my $x2  = ones( $yy->dims() )->transpose() x $xx;
     my $x = $xx->dummy( 1, _len($yy) );
 
-    # say $x == $x2;
     # my $y2 = $yy->transpose() x ones( $xx->dims() );
     my $y = $yy->dummy( 0, _len($xx) );
 
@@ -44,28 +42,26 @@ sub _meshgrid
 
 sub mandel
 {
-    my ($args)     = @_;
+    my ($args) = @_;
+
+    # Assign some default values to the parameters
     my $x          = ( $args->{'x'}          // 640 );
     my $y          = ( $args->{'y'}          // 640 );
     my $num_steps  = ( $args->{'num_steps'}  // 20 );
     my $init_value = ( $args->{'init_value'} // 0 );
     my $max_level  = ( $args->{'max_level'}  // 255 );
-    my $xx         = _linspace( -2, 2, $x );
-    my $yy         = _linspace( -2, 2, $y );
 
     # Generate the coordinates in the complex plane
+    my $xx = _linspace( -2, 2, $x );
+    my $yy = _linspace( -2, 2, $y );
     my ( $X, $Y ) = _meshgrid( $xx, $yy, );
-    say $X->at( 0, 90 );
-    say $Y->info;
-    say $Y->at( 90, 0 );
 
     # Combine them into a matrix of complex numbers
     my $Z = $X + pdl('i') * $Y;
     say "Z:", $Z->info;
 
     # Retrieve the dimensions of Z
-    # my ( $x_len, $y_len ) = ( my @zs ) = $Z->dims();
-    ( my @zs ) = $Z->dims();
+    my @zs = $Z->dims();
 
     # value is initialized to init_value in every point of the plane
     my $value = ones( cdouble(), @zs ) * $init_value;
@@ -89,7 +85,6 @@ sub mandel
         # of the same size.
         $value = ( $value * $value ) + $Z;
 
-        # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
@@ -121,46 +116,22 @@ sub mandel
     return $r;
 }
 
-# my $mandelbrot_set = mandel( { max_level => 255, num_steps => 20, } );
-my $ret = mandel( { max_level => 255, num_steps => 20, } );
+sub example
+{
+    my $mandel = mandel( { max_level => 255, num_steps => 20, } );
 
-my $greyscale_fn = "mandelperl.bmp";
+    my $greyscale_fn = "mandelperl.bmp";
 
-# wimage( $mandelbrot_set, $greyscale_fn );
-my $command = sprintf( "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
-    $ret->{r_width}, $ret->{i_height}, $ret->{filename}, $greyscale_fn );
-system($command);
-system( "gwenview", $greyscale_fn );
+    # wimage( $mandelbrot_set, $greyscale_fn );
+    my $command = sprintf(
+        "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
+        $mandel->{r_width},  $mandel->{i_height},
+        $mandel->{filename}, $greyscale_fn
+    );
+    system($command);
+    system( "gwenview", $greyscale_fn );
 
-=begin removed
+    return;
+}
 
-mandelbrot_set = mandelbrot_set.astype('uint8')
-m = np.repeat(mandelbrot_set, 3, axis=1)
-gradient = "Tropical Colors"
-greyscale_fn = "mandel.png"
-# colored_fn = "mandel_colored.png"
-colored_fn = greyscale_fn
-png.from_array(m, 'RGB').save(greyscale_fn)
-
-subprocess.check_call(
-    [
-        "gimp",  greyscale_fn,
-        # "gimp-2.99",  greyscale_fn,
-        "--no-interface",
-        "--batch-interpreter=python-fu-eval",
-        "-b",
-        ('img = gimp.image_list()[0]\n' +
-         'draw=img.active_drawable\n' +
-         'pdb.gimp_context_set_gradient("{gradient}")\n' +
-         'pdb.plug_in_gradmap(img, draw)\n' +
-         'pdb.gimp_file_save(img, draw, "{colored_fn}", "{colored_fn}")\n' +
-         'pdb.gimp_quit(1)\n'
-         ).format(
-             colored_fn=colored_fn,
-             gradient=gradient,
-         )
-    ]
-)
-
-subprocess.check_call(["gwenview", colored_fn])
-=cut
+example();
