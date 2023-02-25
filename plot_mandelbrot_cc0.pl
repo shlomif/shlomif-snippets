@@ -45,15 +45,15 @@ sub mandel
     my ($args) = @_;
 
     # Assign some default values to the parameters
-    my $x          = ( $args->{'x'}          // 640 );
-    my $y          = ( $args->{'y'}          // 640 );
+    my $width      = ( $args->{'width'}      // 640 );
+    my $height     = ( $args->{'height'}     // 640 );
     my $num_steps  = ( $args->{'num_steps'}  // 20 );
     my $init_value = ( $args->{'init_value'} // 0 );
     my $max_level  = ( $args->{'max_level'}  // 255 );
 
     # Generate the coordinates in the complex plane
-    my $xx = _linspace( -2, 2, $x );
-    my $yy = _linspace( -2, 2, $y );
+    my $xx = _linspace( -2, 2, $width );
+    my $yy = _linspace( -2, 2, $height );
     my ( $X, $Y ) = _meshgrid( $xx, $yy, );
 
     # Combine them into a matrix of complex numbers
