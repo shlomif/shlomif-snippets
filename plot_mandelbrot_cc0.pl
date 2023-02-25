@@ -68,7 +68,7 @@ sub mandel
 
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    my $ret = zeros( ushort(), @zs );
+    my $img = zeros( ushort(), @zs );
 
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
@@ -76,7 +76,7 @@ sub mandel
 
     foreach my $step ( 1 .. $num_steps )
     {
-        print "step=$step ", $ret->info, "\n";
+        print "step=$step ", $img->info, "\n";
 
         # For every point with a mandel value of "v" and a coordinate of "z"
         # perform  v <- (v ^ 2) + z
@@ -103,25 +103,25 @@ sub mandel
 
         # Upgrade the points in the mask to a greater value in the returned
         # Mandelbrot-map.
-        $ret += $mask;
+        $img += $mask;
 
         # Zero the points that have overflowed, so they will not propagate
         # to infinity.
         $value *= ~($current_mask);
     }
 
-    # Now ret is ready for prime time so we return it.
-    die "end1" if not $ret->at( 0, 0 );
-    $ret = ( ( ( $ret * $max_level ) / $num_steps )->byte() );
-    die "end2" if not $ret->at( 0, 0 );
+    # Now img is ready for prime time so we return it.
+    die "end1" if not $img->at( 0, 0 );
+    $img = ( ( ( $img * $max_level ) / $num_steps )->byte() );
+    die "end2" if not $img->at( 0, 0 );
 
-    # $ret = $ret->byte();
-    my $r = +{};
-    ( $r->{r_width}, $r->{i_height} ) = @zs;
-    $r->{filename} =
-        sprintf( "f_rw=%lu_iw=%lu.img", $r->{r_width}, $r->{i_height} );
-    writefraw( $ret, $r->{filename} );    # write a raw file
-    return $r;
+    # $img = $img->byte();
+    my $ret = +{};
+    ( $ret->{r_width}, $ret->{i_height} ) = @zs;
+    $ret->{filename} =
+        sprintf( "f_rw=%lu_iw=%lu.img", $ret->{r_width}, $ret->{i_height} );
+    writefraw( $img, $ret->{filename} );    # write a raw file
+    return $ret;
 }
 
 sub example
