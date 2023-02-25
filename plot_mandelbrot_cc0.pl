@@ -29,7 +29,7 @@ sub _len
 
 sub _meshgrid
 {
-    my ( $xx, $yy, $n ) = @_;
+    my ( $xx, $yy ) = @_;
 
     # my $x2  = ones( $yy->dims() )->transpose() x $xx;
     my $x = $xx->dummy( 1, _len($yy) );
@@ -112,9 +112,10 @@ sub mandel
 
     # Now ret is ready for prime time so we return it.
     die "end1" if not $ret->at( 0, 0 );
-    $ret = ( ( ( $ret * $max_level ) / $num_steps )->ushort );
+    $ret = ( ( ( $ret * $max_level ) / $num_steps )->byte() );
     die "end2" if not $ret->at( 0, 0 );
-    $ret = $ret->byte();
+
+    # $ret = $ret->byte();
     my $r = +{};
     ( $r->{r_width}, $r->{i_height} ) = @zs;
     $r->{filename} =
