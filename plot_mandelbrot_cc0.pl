@@ -137,7 +137,10 @@ sub example
         $mandel_ret->{filename}, $greyscale_fn
     );
     system($command);
-    system( "gwenview", $greyscale_fn );
+    if ( not $ENV{T} )
+    {
+        system( "gwenview", $greyscale_fn );
+    }
 
     return;
 }
