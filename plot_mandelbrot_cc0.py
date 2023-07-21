@@ -61,41 +61,46 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255):
     return ret
 
 
-mandelbrot_set = mandel(max_level=255, num_steps=255)
-mandelbrot_set = mandelbrot_set.astype('uint8')
-# m = np.repeat(mandelbrot_set, 3, axis=1)
-gradient = "Tropical Colors"
-greyscale_fn = "mandelpy.dat"
-# colored_fn = "mandel_colored.png"
-# png.from_array(m, 'RGB').save(greyscale_fn)
-mandelbrot_set.tofile(greyscale_fn)
-greyscale_bmp = "mandelpy.bmp"
-colored_fn = greyscale_bmp
-subprocess.check_call(
-    [
-        "gm", "convert", "-depth", "8", "-size",
-        "{}x{}+0".format(r_width, i_height),
-        "gray:"+greyscale_fn, greyscale_bmp,
-    ]
-)
-subprocess.check_call(
-    [
-        "gimp",  greyscale_bmp,
-        # "gimp-2.99",  greyscale_fn,
-        "--no-interface",
-        "--batch-interpreter=python-fu-eval",
-        "-b",
-        ('img = gimp.image_list()[0]\n' +
-         'draw=img.active_drawable\n' +
-         'pdb.gimp_context_set_gradient("{gradient}")\n' +
-         'pdb.plug_in_gradmap(img, draw)\n' +
-         'pdb.gimp_file_save(img, draw, "{colored_fn}", "{colored_fn}")\n' +
-         'pdb.gimp_quit(1)\n'
-         ).format(
-             colored_fn=colored_fn,
-             gradient=gradient,
-         )
-    ]
-)
+def main():
+    mandelbrot_set = mandel(max_level=255, num_steps=255)
+    mandelbrot_set = mandelbrot_set.astype('uint8')
+    # m = np.repeat(mandelbrot_set, 3, axis=1)
+    gradient = "Tropical Colors"
+    greyscale_fn = "mandelpy.dat"
+    # colored_fn = "mandel_colored.png"
+    # png.from_array(m, 'RGB').save(greyscale_fn)
+    mandelbrot_set.tofile(greyscale_fn)
+    greyscale_bmp = "mandelpy.bmp"
+    colored_fn = greyscale_bmp
+    subprocess.check_call(
+        [
+            "gm", "convert", "-depth", "8", "-size",
+            "{}x{}+0".format(r_width, i_height),
+            "gray:"+greyscale_fn, greyscale_bmp,
+        ]
+    )
+    subprocess.check_call(
+        [
+            "gimp",  greyscale_bmp,
+            # "gimp-2.99",  greyscale_fn,
+            "--no-interface",
+            "--batch-interpreter=python-fu-eval",
+            "-b",
+            ('img = gimp.image_list()[0]\n' +
+             'draw=img.active_drawable\n' +
+             'pdb.gimp_context_set_gradient("{gradient}")\n' +
+             'pdb.plug_in_gradmap(img, draw)\n' +
+             'pdb.gimp_file_save(\n' +
+             '    img, draw, "{colored_fn}", "{colored_fn}")\n' +
+             'pdb.gimp_quit(1)\n'
+             ).format(
+                 colored_fn=colored_fn,
+                 gradient=gradient,
+             )
+        ]
+    )
 
-subprocess.check_call(["gwenview", colored_fn])
+    subprocess.check_call(["gwenview", colored_fn])
+
+
+main()
