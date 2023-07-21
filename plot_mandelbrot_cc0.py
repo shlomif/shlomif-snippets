@@ -7,11 +7,13 @@ import subprocess
 
 import numpy as np
 
-import png
+# import png
+
+r_width, i_height = 640, 640
 
 
 # Assign some default values to the parameters
-def mandel(x=640, y=640, num_steps=20, init_value=0, max_level=255):
+def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255):
     xx = np.linspace(-2, 2, x)
     yy = np.linspace(-2, 2, y)
     # Generate the coordinates in the complex plane
@@ -61,16 +63,24 @@ def mandel(x=640, y=640, num_steps=20, init_value=0, max_level=255):
 
 mandelbrot_set = mandel(max_level=255, num_steps=255)
 mandelbrot_set = mandelbrot_set.astype('uint8')
-m = np.repeat(mandelbrot_set, 3, axis=1)
+# m = np.repeat(mandelbrot_set, 3, axis=1)
 gradient = "Tropical Colors"
-greyscale_fn = "mandel.png"
+greyscale_fn = "mandelpy.dat"
 # colored_fn = "mandel_colored.png"
-colored_fn = greyscale_fn
-png.from_array(m, 'RGB').save(greyscale_fn)
-
+# png.from_array(m, 'RGB').save(greyscale_fn)
+mandelbrot_set.tofile(greyscale_fn)
+greyscale_bmp = "mandelpy.bmp"
+colored_fn = greyscale_bmp
 subprocess.check_call(
     [
-        "gimp",  greyscale_fn,
+        "gm", "convert", "-depth", "8", "-size",
+        "{}x{}+0".format(r_width, i_height),
+        "gray:"+greyscale_fn, greyscale_bmp,
+    ]
+)
+subprocess.check_call(
+    [
+        "gimp",  greyscale_bmp,
         # "gimp-2.99",  greyscale_fn,
         "--no-interface",
         "--batch-interpreter=python-fu-eval",
