@@ -9,39 +9,39 @@ use Socket qw( inet_aton sockaddr_in );
 use IO::Socket::INET ();
 use Time::HiRes      qw( usleep );
 
-my $delay_in_usecs = shift || 20_000;
-my $num_packets    = shift || 100;
+my $DELAY_IN_USECS = shift || 20_000;
+my $NUM_PACKETS    = shift || 100;
 
-my $count = 0;
+my $LOCAL_INTERNET_ADDRESS = "localhost";
 
-my $iaddr = "localhost";
-
-my $port = 5000;
+my $PORT = 5000;
 
 my $SOCKET = IO::Socket::INET->new(
     Proto     => 'udp',
-    LocalAddr => $iaddr,
+    LocalAddr => $LOCAL_INTERNET_ADDRESS,
 );
 
-my $host = "localhost";
+my $REMOTE_HOSTNAME = "localhost";
 
 STDOUT->autoflush(1);
 
+my $count = 0;
 $SIG{TERM} = sub {
     print "\$count is $count\n";
     exit(-1);
 };
 
-my $hisiaddr = inet_aton($host) || die "unknown host";
-my $hispaddr = sockaddr_in( $port, $hisiaddr );
-for ( ; $count < $num_packets ; ++$count )
+my $REMOTE_INTERNET_ADDR = inet_aton($REMOTE_HOSTNAME) or die "unknown host";
+my $REMOTE_PORT_AND_ADDR = sockaddr_in( $PORT, $REMOTE_INTERNET_ADDR );
+for ( ; $count < $NUM_PACKETS ; ++$count )
 {
     my $msg = pack( "A40", sprintf( "%s", $count ) );
     print qq#Sending "$msg"!\n#;
-    defined( $SOCKET->send( $msg, 0, $hispaddr ) ) or die "send ${host}: $!";
-    if ( $delay_in_usecs > 0 )
+    defined( $SOCKET->send( $msg, 0, $REMOTE_PORT_AND_ADDR ) )
+        or die "send ${REMOTE_HOSTNAME}: $!";
+    if ( $DELAY_IN_USECS > 0 )
     {
-        usleep($delay_in_usecs);
+        usleep($DELAY_IN_USECS);
     }
 }
 print $count, "\n";
