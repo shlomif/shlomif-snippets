@@ -3,16 +3,17 @@
 use strict;
 use warnings;
 
-foreach my $i (1 .. 100)
+foreach my $i ( 1 .. 100 )
 {
-    my $divides = sub { my $mod = shift; return ($i % $mod == 0); };
-    my $div3 = $divides->(3);
-    my $div5 = $divides->(5);
+    my $divides = sub { my $mod = shift; return ( $i % $mod == 0 ); };
+    my $div3    = $divides->(3);
+    my $div5    = $divides->(5);
 
-    print +(($div3 && $div5) ? "FizzBuzz" :
-        $div3 ? "Fizz" :
-        $div5 ? "Buzz" :
-        $i
+    print +(
+          ( $div3 && $div5 ) ? "FizzBuzz"
+        : $div3              ? "Fizz"
+        : $div5              ? "Buzz"
+        :                      $i
     );
     print "\n";
 }

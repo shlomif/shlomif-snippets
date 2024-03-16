@@ -9,7 +9,7 @@ sub my_reverse
 
     my $ret = "";
 
-    my @chars = ($s =~ /(.)/gms);
+    my @chars = ( $s =~ /(.)/gms );
 
     foreach my $c (@chars)
     {

@@ -10,13 +10,13 @@ sub only_mods
 {
     my $path = shift;
 
-    opendir (my $d, $path);
-    my $ret = any { ! m{\.mod\z} } File::Spec->no_upwards(readdir($d));
-    closedir ($d);
+    opendir( my $d, $path );
+    my $ret = any { !m{\.mod\z} } File::Spec->no_upwards( readdir($d) );
+    closedir($d);
 
     return $ret;
 }
 
 my $path = shift(@ARGV);
-exit(! only_mods($path));
+exit( !only_mods($path) );
 

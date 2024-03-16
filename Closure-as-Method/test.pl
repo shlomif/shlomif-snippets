@@ -8,7 +8,7 @@ package MyModule;
 sub new
 {
     my $class = shift;
-    my $self = {};
+    my $self  = {};
     bless $self, $class;
     $self->initialize(@_);
     return $self;
@@ -24,7 +24,7 @@ sub create_closure_as_method
     my $counter = shift;
     *count = sub {
         my $self = shift;
-        my $arg = shift;
+        my $arg  = shift;
         print "${counter}: $arg\n";
         ++$counter;
     };
@@ -47,15 +47,15 @@ package MySubModule;
 
 use vars (qw(@ISA));
 
-@ISA=(qw(MyModule));
+@ISA = (qw(MyModule));
 
 sub create2
 {
     my $counter = shift;
     *count = sub {
         my $self = shift;
-        my $arg = shift;
-        my $inc = shift;
+        my $arg  = shift;
+        my $inc  = shift;
         $self->SUPER::count($arg);
         print "MySub: $counter : $arg\n";
         if ($inc)
@@ -71,10 +71,10 @@ MySubModule::create2(100);
 
 my $obj2 = MySubModule->new();
 
-$obj2->count("Hello", 1);
-$obj2->count("Yard", 0);
-$obj2->count("Silly", 1);
-$obj2->count("Quack", 0);
+$obj2->count( "Hello", 1 );
+$obj2->count( "Yard",  0 );
+$obj2->count( "Silly", 1 );
+$obj2->count( "Quack", 0 );
 
 1;
 

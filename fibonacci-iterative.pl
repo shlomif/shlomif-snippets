@@ -14,9 +14,9 @@ sub fib_iter
 
     my $pos = 0;
 
-    while ($pos < $n)
+    while ( $pos < $n )
     {
-        ($this_fib, $next_fib) = ($next_fib, $this_fib+$next_fib);
+        ( $this_fib, $next_fib ) = ( $next_fib, $this_fib + $next_fib );
     }
     continue
     {
@@ -26,7 +26,7 @@ sub fib_iter
     return $this_fib;
 }
 
-print +(fib_iter(shift(@ARGV)) . q##), "\n";
+print +( fib_iter( shift(@ARGV) ) . q## ), "\n";
 
 __END__
 

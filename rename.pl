@@ -9,13 +9,13 @@ opendir my $dir_handle, $dir
     or die "Could not open directory $dir - $!";
 
 FILES_LOOP:
-while (my $file = readdir($dir_handle))
+while ( my $file = readdir($dir_handle) )
 {
-    next FILES_LOOP if ! -f $file;
+    next FILES_LOOP if !-f $file;
     my $new = $file;
-    if ($new =~ s{ *\d{1,2}:\d{1,2}:\d{4}(\.jpg)\z}{$1}i)
+    if ( $new =~ s{ *\d{1,2}:\d{1,2}:\d{4}(\.jpg)\z}{$1}i )
     {
-        rename($file, $new);
+        rename( $file, $new );
     }
 }
 closedir($dir_handle);

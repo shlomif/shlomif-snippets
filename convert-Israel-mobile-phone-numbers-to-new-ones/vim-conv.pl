@@ -6,7 +6,7 @@ use lib '/home/shlomi/progs/perl/conv_cell';
 
 use ShlomifConvCell;
 
-my $number = join("", <STDIN>);
+my $number = join( "", <STDIN> );
 
-print my_conv(local_to_international($number));
+print my_conv( local_to_international($number) );
 

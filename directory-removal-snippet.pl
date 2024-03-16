@@ -11,9 +11,9 @@ my $dir = shift(@ARGV);
 find(
     {
         wanted => sub {
-            -d $_ ? rmdir $_ : unlink $_
+            -d $_ ? rmdir $_ : unlink $_;
         },
-        follow => 1,
+        follow  => 1,
         bydepth => 1
     },
     $dir

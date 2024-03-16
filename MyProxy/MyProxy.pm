@@ -13,28 +13,29 @@ use vars qw(@ISA);
 
 sub STORE
 {
-    my ($self, $key, $value) = (@_);
-    if ($key ne "**PROXIED**")
+    my ( $self, $key, $value ) = (@_);
+    if ( $key ne "**PROXIED**" )
     {
-        die "Illegal hash assignment called from " . join("::", caller) . "\n";
+        die "Illegal hash assignment called from "
+            . join( "::", caller ) . "\n";
     }
-    $self->SUPER::STORE($key, $value);
+    $self->SUPER::STORE( $key, $value );
 }
 
 sub FETCH
 {
-    my ($self, $key) = (@_);
-    if ($key ne "**PROXIED**")
+    my ( $self, $key ) = (@_);
+    if ( $key ne "**PROXIED**" )
     {
-        die "Illegal hash fetching called from " . join("::", caller) . "\n";
+        die "Illegal hash fetching called from " . join( "::", caller ) . "\n";
     }
     return $self->SUPER::FETCH($key);
 }
 
 sub EXISTS
 {
-    my ($self, $key) = (@_);
-    die "Illegal exists() called from " . join("::", caller) . "\n";
+    my ( $self, $key ) = (@_);
+    die "Illegal exists() called from " . join( "::", caller ) . "\n";
 }
 
 package MyProxy;
@@ -51,7 +52,7 @@ sub new
     tie %hash, "MyProxy::Hash";
     my $self = \%hash;
 
-    bless($self, $class);
+    bless( $self, $class );
 
     $self->initialize(@_);
 
@@ -60,20 +61,17 @@ sub new
 
 sub initialize
 {
-    my $self = shift;
+    my $self          = shift;
     my $proxied_class = shift;
 
-    $self->{'**PROXIED**'} =
-        $proxied_class->new(
-            @_
-        );
+    $self->{'**PROXIED**'} = $proxied_class->new(@_);
 
     return 0;
 }
 
 sub AUTOLOAD
 {
-    my $self = shift;
+    my $self      = shift;
     my $func_name = $AUTOLOAD;
     $func_name =~ s!^MyProxy::!!;
     return $self->{'**PROXIED**'}->$func_name(@_);

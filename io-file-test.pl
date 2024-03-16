@@ -12,7 +12,7 @@ use IO::File;
 }
 
 {
-    my $fh = IO::File->new("myfile.txt", "w");
+    my $fh = IO::File->new( "myfile.txt", "w" );
     $fh->print("SFO From here to there and everywhere\n");
     $fh->close();
 }

@@ -6,14 +6,14 @@ use warnings;
 use File::Find::Object;
 use List::MoreUtils qw(all);
 
-my @indexes = (0,1);
+my @indexes = ( 0, 1 );
 my @paths;
 for my $idx (@indexes)
 {
     push @paths, shift(@ARGV);
 }
 
-my @finders = map { File::Find::Object->new({}, $_ ) } @paths;
+my @finders = map { File::Find::Object->new( {}, $_ ) } @paths;
 
 my @results;
 
@@ -23,9 +23,9 @@ sub fetch
 {
     my $idx = shift;
 
-    if ($results[$idx] = $finders[$idx]->next_obj())
+    if ( $results[$idx] = $finders[$idx]->next_obj() )
     {
-        $fns[$idx] = join("/", @{$results[$idx]->full_components()});
+        $fns[$idx] = join( "/", @{ $results[$idx]->full_components() } );
     }
 
     return;
@@ -35,7 +35,7 @@ sub only_in
 {
     my $idx = shift;
 
-    printf("Only in %s: %s\n", $paths[$idx], $fns[$idx]);
+    printf( "Only in %s: %s\n", $paths[$idx], $fns[$idx] );
     fetch($idx);
 
     return;
@@ -47,12 +47,12 @@ for my $idx (@indexes)
 }
 
 COMPARE:
-while (all { $_ } @results)
+while ( all { $_ } @results )
 {
     my $skip = 0;
     foreach my $idx (@indexes)
     {
-        if (!$results[$idx]->is_file())
+        if ( !$results[$idx]->is_file() )
         {
             fetch($idx);
             $skip = 1;
@@ -63,17 +63,17 @@ while (all { $_ } @results)
         next COMPARE;
     }
 
-    if ($fns[0] lt $fns[1])
+    if ( $fns[0] lt $fns[1] )
     {
         only_in(0);
     }
-    elsif ($fns[1] lt $fns[0])
+    elsif ( $fns[1] lt $fns[0] )
     {
         only_in(1);
     }
     else
     {
-        system("diff", "-u", map {$_->path() } @results);
+        system( "diff", "-u", map { $_->path() } @results );
         foreach my $idx (@indexes)
         {
             fetch($idx);
@@ -83,7 +83,7 @@ while (all { $_ } @results)
 
 foreach my $idx (@indexes)
 {
-    while($results[$idx])
+    while ( $results[$idx] )
     {
         only_in($idx);
     }

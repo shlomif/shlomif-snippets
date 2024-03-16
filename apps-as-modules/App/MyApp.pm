@@ -5,7 +5,7 @@ use warnings;
 
 use base 'Exporter';
 
-our @EXPORT=(qw(run));
+our @EXPORT = (qw(run));
 
 use Getopt::Long;
 
@@ -13,7 +13,7 @@ sub run
 {
     my $name = "World";
 
-    GetOptions("name=s" => \$name);
+    GetOptions( "name=s" => \$name );
 
     print "Hello, $name!\n";
 }

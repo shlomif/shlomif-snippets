@@ -8,8 +8,7 @@ use String::ShellQuote;
 # my $host_unquoted = shift(@ARGV);
 my @hosts_unquoted = @ARGV;
 
-my @accounts =
-(
+my @accounts = (
     {
         user => "perl_il",
     },
@@ -20,7 +19,7 @@ my @accounts =
         user => "python_il",
     },
     {
-        user => "hackers_il",
+        user         => "hackers_il",
         path_to_wiki => "htdocs/mediawiki/",
     },
 );
@@ -32,10 +31,11 @@ foreach my $acct (@accounts)
     print "$user\n";
     system(
         "ssh",
-        ($user . '@' . "hexten.net"),
+        ( $user . '@' . "hexten.net" ),
         (
-            "cd ${path}/maintenance && (for I in "
-                . shell_quote(@hosts_unquoted) . " ; do "
+                  "cd ${path}/maintenance && (for I in "
+                . shell_quote(@hosts_unquoted)
+                . " ; do "
                 . qq{ php cleanupSpam.php "\$I" ; }
                 . " done )"
         ),

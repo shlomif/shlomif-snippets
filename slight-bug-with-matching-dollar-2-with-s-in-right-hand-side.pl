@@ -10,13 +10,15 @@ VIPE_DOCS = index.html
 VIPE_TTMLS =
 END_OF_STRING
 
-if ($ENV{BUG})
+if ( $ENV{BUG} )
 {
-    print +($text =~ s!^(T2_DOCS = )([^\n]*)!$1 . ($2 =~ s#\bhumour/fortunes/##gr)!emrs ) =~ /T2_DOCS/g
+    print +( $text =~
+            s!^(T2_DOCS = )([^\n]*)!$1 . ($2 =~ s#\bhumour/fortunes/##gr)!emrs )
+        =~ /T2_DOCS/g;
 }
 else
 {
-    print +($text =~ s!^(T2_DOCS = )([^\n]*)!$1 . $2!emrs ) =~ /T2_DOCS/g;
+    print +( $text =~ s!^(T2_DOCS = )([^\n]*)!$1 . $2!emrs ) =~ /T2_DOCS/g;
 }
 print "\n";
 

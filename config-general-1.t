@@ -8,7 +8,7 @@ use Test::More tests => 1;
 use Config::General;
 use YAML::XS qw(DumpFile);
 
-my $conf = Config::General->new(-String => <<'EOF');
+my $conf = Config::General->new( -String => <<'EOF');
 <Controller::Distribution>
     graph_path   __HOME__/root/dist/graph/
 </Controller::Distribution>
@@ -29,12 +29,12 @@ EOF
 my %values = $conf->getall();
 
 # TEST
-is_deeply (
+is_deeply(
     $values{'Production'}{'Test'},
     [
         "hello",
         {
-            One => "Two",
+            One   => "Two",
             Three => "Four",
         },
     ],

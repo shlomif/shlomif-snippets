@@ -16,7 +16,7 @@ sub lo_count
 {
     open my $in, "<", "mega.xml";
     local $.;
-    while(<$in>)
+    while (<$in>)
     {
     }
     my $ret = $.;
@@ -24,14 +24,15 @@ sub lo_count
     return $ret;
 }
 
-if (lo_count() != wc_count())
+if ( lo_count() != wc_count() )
 {
     die "Error";
 }
 
-timethese(100,
+timethese(
+    100,
     {
-       'wc' => \&wc_count,
+        'wc' => \&wc_count,
         'lo' => \&lo_count,
     }
 );

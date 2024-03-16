@@ -18,10 +18,14 @@ sub find_integer_triangles_by_leg
     my $max_leg = 1000;
     my @values;
 
-    foreach my $i (1 .. (($first_leg>$max_leg)?($first_leg*2):($max_leg*2)))
+    foreach my $i (
+        1 .. (
+            ( $first_leg > $max_leg ) ? ( $first_leg * 2 ) : ( $max_leg * 2 )
+        )
+        )
     {
-        my $hypotenuse = sqrt( $i*$i + $first_leg*$first_leg );
-        if ($hypotenuse == int($hypotenuse))
+        my $hypotenuse = sqrt( $i * $i + $first_leg * $first_leg );
+        if ( $hypotenuse == int($hypotenuse) )
         {
             push @values, $i;
         }
@@ -31,6 +35,5 @@ sub find_integer_triangles_by_leg
 
 my ($leg) = @ARGV;
 
-print join(", ", @{ find_integer_triangles_by_leg($leg) } ), "\n";
-
+print join( ", ", @{ find_integer_triangles_by_leg($leg) } ), "\n";
 

@@ -9,11 +9,11 @@ sub find_needle
 {
     my $base = shift;
 
-    my $finder = File::Find::Object->new({}, $base);
+    my $finder = File::Find::Object->new( {}, $base );
 
-    while (defined(my $r = $finder->next()))
+    while ( defined( my $r = $finder->next() ) )
     {
-        if ($r =~ /target/)
+        if ( $r =~ /target/ )
         {
             return $r;
         }
@@ -22,9 +22,9 @@ sub find_needle
     return;
 }
 
-my $found = find_needle(shift(@ARGV));
+my $found = find_needle( shift(@ARGV) );
 
-if (defined($found))
+if ( defined($found) )
 {
     print "$found\n";
 }

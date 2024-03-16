@@ -28,7 +28,7 @@ use utf8;
 
 my $schema = DB::Main->connect("DBI:mysql:database=test_shmuel_hebrew");
 
-my $artist = $schema->resultset("Artist")->create({name => "שמואל"});
+my $artist = $schema->resultset("Artist")->create( { name => "שמואל" } );
 
 my @all_results = $schema->resultset('Artist')->all();
 

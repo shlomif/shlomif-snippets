@@ -9,9 +9,9 @@ sub my_reverse
 
     my $ret = "";
 
-    for my $idx (0 .. length($s) - 1)
+    for my $idx ( 0 .. length($s) - 1 )
     {
-        $ret = substr($s, $idx, 1) . $ret;
+        $ret = substr( $s, $idx, 1 ) . $ret;
     }
 
     return $ret;

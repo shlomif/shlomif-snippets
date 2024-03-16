@@ -10,10 +10,10 @@ use File::Spec;
 
 my $dir = tempdir( CLEANUP => 1 );
 
-my $filename = File::Spec->catfile($dir, 'myfile.txt');
+my $filename = File::Spec->catfile( $dir, 'myfile.txt' );
 
 open my $fh, '>', $filename;
 print {$fh} "Hello\n";
-close ($fh);
+close($fh);
 
 print "Success!\n";

@@ -7,11 +7,9 @@ use File::ReadBackwards;
 use Getopt::Long;
 
 my $count;
-GetOptions(
-    "n=i" => \$count,
-);
+GetOptions( "n=i" => \$count, );
 
-if (!defined($count))
+if ( !defined($count) )
 {
     die "Please specify -n for the line count.";
 }
@@ -21,7 +19,7 @@ my $filename = shift;
 my $bw = File::ReadBackwards->new($filename)
     or die "Could not backwards-open '$filename' - $!";
 
-foreach my $idx (1 .. $count)
+foreach my $idx ( 1 .. $count )
 {
     $bw->readline();
 }
@@ -33,8 +31,7 @@ $bw->close();
 open my $truncate_fh, "+<", $filename
     or die "Could not truncate-open '$filename' - $!";
 
-truncate($truncate_fh, $wanted_len);
+truncate( $truncate_fh, $wanted_len );
 
 close($truncate_fh);
-
 

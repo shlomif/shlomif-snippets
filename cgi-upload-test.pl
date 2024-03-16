@@ -5,17 +5,17 @@ use strict;
 use CGI;
 use CGI::Upload;
 
-my $q = CGI->new();
-my $upload = CGI::Upload->new({ query => $q});
+my $q      = CGI->new();
+my $upload = CGI::Upload->new( { query => $q } );
 
 use constant FILE_PARAM => 'file';
 
 print $q->header();
 
-if ($q->param('sent'))
+if ( $q->param('sent') )
 {
-    my $file_name = $upload->file_name(FILE_PARAM);
-    my $file_type = $upload->file_type(FILE_PARAM);
+    my $file_name   = $upload->file_name(FILE_PARAM);
+    my $file_type   = $upload->file_type(FILE_PARAM);
     my $file_handle = $upload->file_handle(FILE_PARAM);
 
     print "<html><body>\n";

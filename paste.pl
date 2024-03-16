@@ -5,7 +5,7 @@ use warnings;
 
 use List::MoreUtils qw(none);
 
-my @filenames = map { shift(@ARGV) } (0 .. 1);
+my @filenames = map { shift(@ARGV) } ( 0 .. 1 );
 
 if (@ARGV)
 {
@@ -21,12 +21,12 @@ foreach my $filename (@filenames)
     push @handles, $fh;
 }
 
-while (none { eof($_) } @handles)
+while ( none { eof($_) } @handles )
 {
     my @lines = map { scalar(<$_>) } @handles;
     chomp(@lines);
 
-    print join("\t", @lines), "\n";
+    print join( "\t", @lines ), "\n";
 }
 
 foreach my $fh (@handles)

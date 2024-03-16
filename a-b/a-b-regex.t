@@ -22,18 +22,25 @@ my $r = qr{\A$regex\z};
 
 # like ("", $r, "Empty string");
 # TEST
-like("aa", $r, "aa");
+like( "aa", $r, "aa" );
+
 # TEST
-like("bb", $r, "bb");
+like( "bb", $r, "bb" );
+
 # TEST
-like ("baab", $r, "baab");
+like( "baab", $r, "baab" );
+
 # TEST
-like ("abab", $r, "abab");
+like( "abab", $r, "abab" );
+
 # TEST
-like ("abbabb", $r, "abbabb");
+like( "abbabb", $r, "abbabb" );
+
 # TEST
-unlike ("a", $r, "not(a)");
+unlike( "a", $r, "not(a)" );
+
 # TEST
-unlike ("b", $r, "not(b)");
+unlike( "b", $r, "not(b)" );
+
 # TEST
-unlike ("ababb", $r, "not(ababb)");
+unlike( "ababb", $r, "not(ababb)" );

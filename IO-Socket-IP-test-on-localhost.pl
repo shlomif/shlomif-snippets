@@ -18,11 +18,10 @@ use IO::Socket::IP;
 
 my $sock = IO::Socket::IP->new(
     LocalHost => 'localhost',
-    PeerHost => 'localhost',
-    PeerPort => 6300,
-    Type => SOCK_STREAM,
-)
-    or die "Cannot init socket - $@";
+    PeerHost  => 'localhost',
+    PeerPort  => 6300,
+    Type      => SOCK_STREAM,
+) or die "Cannot init socket - $@";
 
 $sock->print("GET /notify$CRLF");
 

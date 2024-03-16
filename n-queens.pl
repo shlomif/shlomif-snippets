@@ -17,8 +17,7 @@ sub recurse
     if ( $y == $N )
     {
         print '-' x ( $N + 2 ), "\n";
-        print map
-        {
+        print map {
             my $yy = $_;
             (
                 "|",

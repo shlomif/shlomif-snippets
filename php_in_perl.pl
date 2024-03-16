@@ -22,16 +22,15 @@ sub str_shuffle
 {
     my $string = shift;
 
-    return join("", shuffle(split //, $string));
+    return join( "", shuffle( split //, $string ) );
 }
 
 sub test_str_shuffle
 {
     my $string = shift;
 
-    print sprintf(qq{Shuffling of "%s" is "%s".\n},
-        $string, str_shuffle($string)
-    );
+    print sprintf( qq{Shuffling of "%s" is "%s".\n},
+        $string, str_shuffle($string) );
 }
 
 use Time::HiRes qw(gettimeofday);
@@ -43,11 +42,11 @@ sub microtime
 {
     my $get_as_float = shift;
 
-    my ($secs, $microsecs) = gettimeofday();
+    my ( $secs, $microsecs ) = gettimeofday();
 
     if ($get_as_float)
     {
-        return $secs + ($microsecs * 1e-6);
+        return $secs + ( $microsecs * 1e-6 );
     }
     else
     {
@@ -59,10 +58,9 @@ sub test_microtime
 {
     my $get_as_float = shift;
 
-    print "Microtime(" .
-        ($get_as_float ? "true" : "false") . ") = " .
-        microtime($get_as_float) . "\n"
-        ;
+    print "Microtime("
+        . ( $get_as_float ? "true" : "false" ) . ") = "
+        . microtime($get_as_float) . "\n";
 }
 
 test_str_shuffle("HelloWorld");

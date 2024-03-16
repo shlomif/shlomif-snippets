@@ -6,8 +6,8 @@ use warnings;
 sub foo
 {
     my $self = shift;
-    my ($i, $j) = @_;
-    return ($i+$j);
+    my ( $i, $j ) = @_;
+    return ( $i + $j );
 }
 
 1;

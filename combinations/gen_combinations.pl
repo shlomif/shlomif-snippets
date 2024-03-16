@@ -5,21 +5,21 @@ use warnings;
 
 sub combi
 {
-    my ($ALPHABET, $prefix, $count) = @_;
+    my ( $ALPHABET, $prefix, $count ) = @_;
 
-    if (! $count)
+    if ( !$count )
     {
         print $prefix, "\n";
         return;
     }
     foreach my $token (@$ALPHABET)
     {
-        combi($ALPHABET, $prefix.$token, $count-1);
+        combi( $ALPHABET, $prefix . $token, $count - 1 );
     }
     return;
 }
 
-combi([0 .. 9, 'A' .. 'E'], '', 11);
+combi( [ 0 .. 9, 'A' .. 'E' ], '', 11 );
 
 =head1 COPYRIGHT & LICENSE
 

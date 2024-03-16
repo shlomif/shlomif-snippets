@@ -14,9 +14,9 @@ sub directionality
 {
     my $string = shift;
 
-    if (my ($match) = $string =~ /([\p{Bidi_Class:L}\p{Bidi_Class:R}])/)
+    if ( my ($match) = $string =~ /([\p{Bidi_Class:L}\p{Bidi_Class:R}])/ )
     {
-        return (($match =~ /\A\p{Bidi_Class:L}/) ? "L" : "R");
+        return ( ( $match =~ /\A\p{Bidi_Class:L}/ ) ? "L" : "R" );
     }
     else
     {
@@ -24,11 +24,11 @@ sub directionality
     }
 }
 
-my $text = decode('UTF-8', shift(@ARGV));
+my $text = decode( 'UTF-8', shift(@ARGV) );
 
-my %verdicts = ("L" => "LTR", "R" => "RTL", "N" => "Neutral");
+my %verdicts = ( "L" => "LTR", "R" => "RTL", "N" => "Neutral" );
 
-print $verdicts{directionality($text)}, "\n";
+print $verdicts{ directionality($text) }, "\n";
 
 =head1 COPYRIGHT
 

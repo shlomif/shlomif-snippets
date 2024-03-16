@@ -5,10 +5,10 @@ use warnings;
 
 my $init_time = time();
 
-while(1)
+while (1)
 {
     sleep(5);
-    print +(time()-$init_time), "\n";
+    print +( time() - $init_time ), "\n";
 }
 
 __END__

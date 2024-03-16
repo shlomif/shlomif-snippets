@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 my $filename = shift(@ARGV);
-my $new_fn = $filename . '.new';
+my $new_fn   = $filename . '.new';
 
 open my $in, '<', $filename
     or die "Cannot open $filename for reading - $!";
@@ -16,7 +16,7 @@ ENTHDR|1|3.0
 STAGEHDR|Barcoded
 EOF
 
-while (my $line = <$in>)
+while ( my $line = <$in> )
 {
     print {$out} $line;
 }
@@ -24,4 +24,4 @@ while (my $line = <$in>)
 close($out);
 close($in);
 
-rename($new_fn, $filename);
+rename( $new_fn, $filename );

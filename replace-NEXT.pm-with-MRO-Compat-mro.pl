@@ -11,7 +11,7 @@ foreach my $fn (`ack -l NEXT`)
     my @lines = io()->file($fn)->getlines();
     foreach my $l (@lines)
     {
-        if ($l =~ m{\Ause NEXT;\Z})
+        if ( $l =~ m{\Ause NEXT;\Z} )
         {
             $l = "use MRO::Compat;\n";
         }

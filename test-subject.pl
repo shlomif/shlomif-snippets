@@ -8,8 +8,8 @@ use Email::Simple;
 
 use IO::All;
 
-my $email = Email::Simple->new(scalar(io()->file("mail1.msg")->slurp()));
+my $email = Email::Simple->new( scalar( io()->file("mail1.msg")->slurp() ) );
 
 my $subj = $email->header("Subject");
 
-print scalar(decode_mimewords($subj)), "\n";
+print scalar( decode_mimewords($subj) ), "\n";

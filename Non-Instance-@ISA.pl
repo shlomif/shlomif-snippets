@@ -18,7 +18,7 @@ sub mycalled
 
 package Child;
 
-our @ISA=(qw(Parent));
+our @ISA = (qw(Parent));
 
 sub mycalled
 {
