@@ -2,12 +2,12 @@
 
 use strict;
 use warnings;
+use autodie;
 
-use Socket;
-use Sys::Hostname;
+use Socket qw( inet_aton sockaddr_in );
 
 use IO::Socket::INET ();
-use Time::HiRes qw(usleep);
+use Time::HiRes      qw( usleep );
 
 my $delay_in_usecs = shift || 20_000;
 my $num_packets    = shift || 100;
@@ -37,8 +37,8 @@ my $hispaddr = sockaddr_in( $port, $hisiaddr );
 for ( ; $count < $num_packets ; ++$count )
 {
     my $msg = pack( "A40", sprintf( "%s", $count ) );
-    print "Sending \"$msg\"!\n";
-    defined( $SOCKET->send( $msg, 0, $hispaddr ) ) || die "send $host: $!";
+    print qq#Sending "$msg"!\n#;
+    defined( $SOCKET->send( $msg, 0, $hispaddr ) ) or die "send ${host}: $!";
     if ( $delay_in_usecs > 0 )
     {
         usleep($delay_in_usecs);
