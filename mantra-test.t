@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use lib ".";
 use GenerateMantra ();
@@ -19,10 +19,25 @@ use GenerateMantra ();
         [ "one", "zero", ] );
 
     # TEST
-    is_deeply( $gen->permute( [ "zero", "One", "TWO" ], [ 1, 2, ] ),
+    is_deeply( $gen->permute( [ "zero", "One", "TWO", ], [ 1, 2, ] ),
         [ "One", "TWO", "zero", ] );
 
     # TEST
-    is_deeply( $gen->permute( [ "zero", "One", "TWO" ], [ 0, 2, ] ),
+    is_deeply( $gen->permute( [ "zero", "One", "TWO", ], [ 0, 2, ] ),
         [ "zero", "TWO", "One", ] );
+}
+
+{
+    my $gen = GenerateMantra->new();
+
+    $gen->{_count} = 5;
+
+    # TEST
+    is_deeply(
+        $gen->repeat( [ "zero", "One", "TWO", ], ),
+        [
+            "zero", "One",  "TWO", "zero", "One",  "TWO", "zero", "One",
+            "TWO",  "zero", "One", "TWO",  "zero", "One", "TWO",
+        ],
+    );
 }

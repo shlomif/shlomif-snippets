@@ -30,6 +30,15 @@ sub permute
     return \@ret;
 }
 
+sub repeat
+{
+    my ( $self, $arr ) = @_;
+
+    my $COUNT = $self->{_count};
+
+    return [ (@$arr) x $COUNT ];
+}
+
 1;
 
 # __END__
