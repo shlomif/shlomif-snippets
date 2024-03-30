@@ -34,15 +34,22 @@ sub run
         [ "Now, fuck off!", "Fuck off, now!", ]
     );
 
+    my $gen = GenerateMantra->new();
+    $gen->{_count} = 10;
+
     foreach my $item3_perm ( [ 0, ], [ 1, ], )
     {
-        print(
-            map { "$_\n" } (
-                map { @$_ }
-                    ( @lines[ 0 .. 2 ], [ @{ $lines[3] }[@$item3_perm] ], )
-            )
-        );
-        print "\n";
+        my $para =
+            [ map { @$_ }
+                ( @lines[ 0 .. 2 ], [ @{ $lines[3] }[@$item3_perm] ], ) ];
+
+        my @paras = @{ $gen->repeat( [$para] ) };
+        my @text  = map {
+            join "",
+                map { "$_\n" }
+                (@$_)
+        } @paras;
+        print join( "\n", @text ), "\n--------\n";
     }
 
     return;
