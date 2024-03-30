@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use lib ".";
 use GenerateMantra ();
@@ -40,4 +40,11 @@ use GenerateMantra ();
             "TWO",  "zero", "One", "TWO",  "zero", "One", "TWO",
         ],
     );
+
+    my $gen2 = GenerateMantra->new();
+
+    $gen2->{_count} = 3;
+
+    # TEST
+    is_deeply( $gen2->repeat( [ "zero", ], ), [ "zero", "zero", "zero", ], );
 }
