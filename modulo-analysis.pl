@@ -17,7 +17,9 @@ for my $base ( 2 .. 101 )
         for my $start_mod ( 0 .. $base - 1 )
         {
             local $_ = $start_mod;
+            ## no critic
             my $r = eval( $formulas[$formula_idx] . '' );
+            ## use critic
             push @{ $found{ $r % $base } }, $start_mod;
         }
         push @results, \%found;
@@ -28,7 +30,7 @@ for my $base ( 2 .. 101 )
             my $x = $_;
             "["
                 . join( ",",
-                map { $_ . " {" . join( "|", @{ $x->{$_} } ) . "} " }
+                map  { $_ . " {" . join( "|", @{ $x->{$_} } ) . "} " }
                 sort { $a <=> $b } keys($_) )
                 . "]"
         } @results

@@ -7,10 +7,9 @@ use Data::Dumper;
 
 require 'flush.pl';
 
-my %unhtml_conv =
-(
-    'lt' => '<',
-    'gt' => '>',
+my %unhtml_conv = (
+    'lt'  => '<',
+    'gt'  => '>',
     'amp' => '&',
 );
 
@@ -25,7 +24,8 @@ sub get_hackers_il_msg
 
     my $text;
 
-    $text = get("http://groups.yahoo.com/group/hackers-il/message/$index?source=1");
+    $text =
+        get("http://groups.yahoo.com/group/hackers-il/message/$index?source=1");
 
     # Take only whatever between the <pre>
     $text =~ s/^[\x00-\xFF]*?<pre>//;
@@ -35,28 +35,28 @@ sub get_hackers_il_msg
     # Is there a CPAN module that does this?
     $text =~ s/\&(amp|lt|gt);/$unhtml_conv{$1}/ge;
 
-    my @lines = split(/\n/, $text);
+    my @lines = split( /\n/, $text );
 
-    my ($fortune, $from);
+    my ( $fortune, $from );
     $fortune = "";
 
-    while(scalar(@lines))
+    while ( scalar(@lines) )
     {
         my $l = shift(@lines);
-        if ($l =~ /^From:/)
+        if ( $l =~ /^From:/ )
         {
             $from = $l;
             $from =~ s/^From:\s*//;
             $from =~ s/<.*$//;
-            $from =~ s/\s+$//; # Remove trailing whitespace
+            $from =~ s/\s+$//;        # Remove trailing whitespace
         }
-        if ($l =~ /^$expression_regex/)
+        if ( $l =~ /^$expression_regex/ )
         {
             $fortune .= $l . "\n";
-            while (scalar(@lines))
+            while ( scalar(@lines) )
             {
                 my $l = shift(@lines);
-                if (($l =~ /^\s*$/) || ($l =~ /WARNING TO SPAMMERS/))
+                if ( ( $l =~ /^\s*$/ ) || ( $l =~ /WARNING TO SPAMMERS/ ) )
                 {
                     last;
                 }
@@ -66,18 +66,17 @@ sub get_hackers_il_msg
         }
     }
 
-    if ($fortune eq "")
+    if ( $fortune eq "" )
     {
         return undef;
     }
 
     my $ret;
 
-    $ret =
-    {
-        'fortune' => $fortune,
-        'group' => "Hackers-IL",
-        'from' => $from,
+    $ret = {
+        'fortune'   => $fortune,
+        'group'     => "Hackers-IL",
+        'from'      => $from,
         'msg_index' => $index,
     };
 
@@ -88,19 +87,22 @@ sub get_hackers_il_msg
 
 #&get_hackers_il_msg(1376);
 # 729 is the first message with the IGLU Cabal mentioned
-for my $msg_index (729 .. 1404)
+for my $msg_index ( 729 .. 1404 )
 {
     print STDERR "$msg_index\n";
     my $fortune = get_hackers_il_msg($msg_index);
-    if (defined($fortune))
+    if ( defined($fortune) )
     {
         print $fortune->{'fortune'}, "\n";
-        print "\t" . $fortune->{'from'} . " in " . $fortune->{'group'} . " msg No. " . $fortune->{'msg_index'} . "\n";
+        print "\t"
+            . $fortune->{'from'} . " in "
+            . $fortune->{'group'}
+            . " msg No. "
+            . $fortune->{'msg_index'} . "\n";
         print "%\n";
         flush(*STDOUT);
     }
 }
 
 ### End Perl Script ###
-
 
