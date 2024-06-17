@@ -1,16 +1,16 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 
 sub old_addbackslashes
 {
     my $string = shift;
-    my $out = "";
-    my $char;
+    my $out    = "";
 
-    foreach $char (split(//, $string))
+    foreach my $char ( split( //, $string ) )
     {
-        if ($char =~ /[\$\\\"]/)
+        if ( $char =~ /[\$\\\"]/ )
         {
             $out .= "\\";
         }
@@ -23,14 +23,13 @@ sub addbackslashes
 {
     my $s = shift;
     $s =~ s/([\$\\\"])/\\$1/g;
-    $s;
+    return $s;
 }
 
-my $p_expr = & {
+my $p_expr = &{
     sub {
         my $x = shift;
-        return
-        "eval {
+        return "eval {
             my \$local_self;
             \$local_self = sub {
                 &{$x}(\"" . addbackslashes($x) . "\");
@@ -38,8 +37,7 @@ my $p_expr = & {
             &{\$local_self}();
         }";
     }
-    }
-(
+    }(
     "sub {
         my \$x = shift;
         return
@@ -51,7 +49,7 @@ my $p_expr = & {
             &{\\\$local_self}();
         }\";
     }"
-);
+    );
 
 my $p_sub_expr = <<"EOF";
 sub {
@@ -101,9 +99,11 @@ EOF
 
 $p_expr = "&{$p_sub_expr}(\"" . addbackslashes($p_sub_expr) . "\")";
 
-my $evaled = eval($p_expr);
+## no critic ( ProhibitStringyEval )
+my $evaled       = eval($p_expr);
 my $evaled_twice = eval($evaled);
-if ($evaled eq $evaled_twice)
+## yes critic
+if ( $evaled eq $evaled_twice )
 {
     print "They are the same.\n";
     print "The expression is:\n<<<\n$evaled\n>>>\n";
