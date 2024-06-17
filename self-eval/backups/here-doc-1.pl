@@ -5,12 +5,12 @@ use strict;
 sub addbackslashes
 {
     my $string = shift;
-    my $out = "";
+    my $out    = "";
     my $char;
 
-    foreach $char (split(//, $string))
+    foreach $char ( split( //, $string ) )
     {
-        if ($char =~ /[\$\\\"]/)
+        if ( $char =~ /[\$\\\"]/ )
         {
             $out .= "\\";
         }
@@ -19,11 +19,10 @@ sub addbackslashes
     return $out;
 }
 
-my $p_expr = & {
+my $p_expr = &{
     sub {
         my $x = shift;
-        return
-        "eval {
+        return "eval {
             my \$local_self;
             \$local_self = sub {
                 &{$x}(\"" . addbackslashes($x) . "\");
@@ -31,8 +30,7 @@ my $p_expr = & {
             &{\$local_self}();
         }";
     }
-    }
-(
+    }(
     "sub {
         my \$x = shift;
         return
@@ -44,7 +42,7 @@ my $p_expr = & {
             &{\\\$local_self}();
         }\";
     }"
-);
+    );
 
 my $p_sub_expr = <<"EOF";
 sub {
@@ -62,11 +60,11 @@ EOF
 
 $p_expr = "&{$p_sub_expr}(\"" . addbackslashes($p_sub_expr) . "\")";
 
-my ($a, $b, @array);
+my ( $a, $b, @array );
 
-my $evaled = eval($p_expr);
+my $evaled       = eval($p_expr);
 my $evaled_twice = eval($evaled);
-if ($evaled eq $evaled_twice)
+if ( $evaled eq $evaled_twice )
 {
     print "They are the same.\n";
     print "The expression is:\n<<<\n$evaled\n>>>\n";

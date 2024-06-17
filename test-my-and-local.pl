@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+## no critic
 my $a = 1;
 {
     no strict;
@@ -6,3 +7,4 @@ my $a = 1;
     $a = 2;
 }
 print $a . "\n";
+## yes critic
