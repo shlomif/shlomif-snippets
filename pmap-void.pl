@@ -17,4 +17,10 @@ pmap_void
     warn "${_}\n";
     Future->done;
 }
-generate => sub { return undef(); }, forks => 5;
+generate => sub {
+
+    # To please perlcritic "return undef;" warning.
+    my @ret = ( undef() );
+    return wantarray() ? (@ret) : $ret[0];
+    },
+    forks => 5;
