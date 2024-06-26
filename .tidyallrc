@@ -1,7 +1,7 @@
 [PerlCritic]
 argv =
 select = **/*.{pl,pm,t} *.{pl,pm,t}
-ignore = bug-rt.perl.org-114372-panic-in-pure-perl-code-golf/MaxMinSwap-panic.pl
+ignore = bug-rt.perl.org-114372-panic-in-pure-perl-code-golf/MaxMinSwap-panic.pl crash-regex-with-perl-5.26.1.pl panic1.pl
 
 [PerlTidy]
 argv = -ci=4 -bl -cti=0 --character-encoding=none

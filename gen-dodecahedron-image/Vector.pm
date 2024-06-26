@@ -3,15 +3,18 @@
 package Vector;
 
 use strict;
+use warnings;
 
 use overload '+' => sub {
     my @coords;
-    my $a;
-    for ( $a = 0 ; $a < 3 ; $a++ )
+    my ($v1, $v2) = @_;
+    my $c1 = $v1->{coords};
+    my $c2 = $v2->{coords};
+    for my $pos (0 .. 2)
     {
-        $coords[$a] = $_[0]->{coords}->[$a] + $_[1]->{coords}->[$a];
+        push @coords, $c1->[$pos] +$c2->[$pos];
     }
-    return new Vector(@coords);
+    return Vector->new(@coords);
     },
     '*' => sub {
     if ( ( ref( $_[1] ) eq 'Vector' ) && ( ref( $_[0] ) ne 'Vector' ) )
@@ -30,21 +33,22 @@ use overload '+' => sub {
     }
     else
     {
-        return new Vector( map { $_ * $_[1]; } @{ $_[0]->{coords} } );
+        return Vector->new( map { $_ * $_[1]; } @{ $_[0]->{coords} } );
     }
     },
     '/' => sub {
-    return new Vector( map { $_ / $_[1]; } @{ $_[0]->{coords} } );
+    return Vector->new( map { $_ / $_[1]; } @{ $_[0]->{coords} } );
     },
     '-' => sub {
     return $_[0] + (-1) * $_[1];
     },
     ;
 
-sub initialize
+sub _initialize
 {
     my $self = shift;
     $self->{coords} = [ 0, 0, 0 ];
+    return;
 }
 
 sub new
@@ -52,7 +56,7 @@ sub new
     my $class = shift;
     my $self  = {};
     bless $self, $class;
-    $self->initialize();
+    $self->_initialize();
 
     if ( ref( $_[0] ) eq 'Vector' )
     {
