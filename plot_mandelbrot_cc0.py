@@ -94,6 +94,9 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
     # to zero, to indicate that none have so far.
     mask = np.zeros(zs, dtype=np.uint)
 
+    sq_value_re = value_re * value_re
+    sq_value_im = value_im * value_im
+
     # Perform the check "num_steps" times
     for step in range(num_steps):
         # For every point with a mandel value of "v" and a coordinate of "z"
@@ -103,14 +106,14 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
         # of the same size.
         # value = (value * value) + Z
         value_re, value_im = (
-            (BASE_DIV(value_re * value_re - value_im * value_im))+X,
+            (BASE_DIV(sq_value_re - sq_value_im))+X,
             (BASE_DIV(2 * value_re * value_im))+Y,
         )
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
-        current_mask = ((value_re * value_re + value_im * value_im) > MAX_NORM)
+        current_mask = ((sq_value_re + sq_value_im) > MAX_NORM)
         # Update the mask. We use "or" in order to avoid a situation where
         # 1 and 1 become two or so.
         # mask = np.logical_or(mask, current_mask, dtype=np.longlong)
@@ -123,6 +126,9 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
         # value_re *= np.logical_not(current_mask, dtype=np.longlong)
         value_re *= np.logical_not(current_mask)
         value_im *= np.logical_not(current_mask)
+
+        sq_value_re = value_re * value_re
+        sq_value_im = value_im * value_im
 
     # Now ret is ready for prime time so we return it.
     ret = (ret * max_level) // num_steps
