@@ -68,6 +68,7 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
     xx = np.linspace(-2*BASE, 2*BASE, x, dtype=np.longlong)
     yy = np.linspace(-2*BASE, 2*BASE, y, dtype=np.longlong)
     # Generate the coordinates in the complex plane
+    # Y, X = np.meshgrid(xx, yy, indexing='ij', dtype=np.longlong)
     Y, X = np.meshgrid(xx, yy, indexing='ij')
     # Combine them into a matrix of complex numbers
     # Z = X + 1j * Y
@@ -80,10 +81,10 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
     value_im = np.ones(zs, dtype=np.longlong) * init_value
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
-    ret = np.zeros(zs, dtype=np.uint)
+    ret = np.zeros(zs, dtype=np.longlong)
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
-    mask = np.zeros(zs, dtype=bool)
+    mask = np.zeros(zs, dtype=np.uint)
 
     # Perform the check "num_steps" times
     for step in range(num_steps):
@@ -94,22 +95,24 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
         # of the same size.
         # value = (value * value) + Z
         value_re, value_im = (
-            ((value_re ** 2 - value_im ** 2) / BASE)+X,
+            ((value_re * value_re - value_im * value_im) / BASE)+X,
             ((2 * value_re * value_im) / BASE)+Y,
         )
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
         # than 2.
-        current_mask = ((value_re ** 2 - value_im ** 2) > MAX_NORM)
+        current_mask = ((value_re * value_re + value_im * value_im) > MAX_NORM)
         # Update the mask. We use "or" in order to avoid a situation where
         # 1 and 1 become two or so.
+        # mask = np.logical_or(mask, current_mask, dtype=np.longlong)
         mask = np.logical_or(mask, current_mask)
         # Upgrade the points in the mask to a greater value in the returned
         # Mandelbrot-map.
         ret += mask
         # Zero the points that have overflowed, so they will not propagate
         # to infinity.
+        # value_re *= np.logical_not(current_mask, dtype=np.longlong)
         value_re *= np.logical_not(current_mask)
         value_im *= np.logical_not(current_mask)
 
