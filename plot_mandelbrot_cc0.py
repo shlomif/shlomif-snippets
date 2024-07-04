@@ -64,7 +64,15 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255):
 def int_mandel(x=r_width, y=i_height, num_steps=20,
                init_value=0, max_level=255):
     BASE = 100000
+    BASE = (1 << 20)
     MAX_NORM = BASE * BASE * 2
+    if BASE == (1 << 20):
+        def BASE_DIV(mat):
+            return mat >> 20
+    else:
+        def BASE_DIV(mat):
+            return mat / BASE
+
     xx = np.linspace(-2*BASE, 2*BASE, x, dtype=np.longlong)
     yy = np.linspace(-2*BASE, 2*BASE, y, dtype=np.longlong)
     # Generate the coordinates in the complex plane
@@ -95,8 +103,8 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
         # of the same size.
         # value = (value * value) + Z
         value_re, value_im = (
-            ((value_re * value_re - value_im * value_im) / BASE)+X,
-            ((2 * value_re * value_im) / BASE)+Y,
+            (BASE_DIV(value_re * value_re - value_im * value_im))+X,
+            (BASE_DIV(2 * value_re * value_im))+Y,
         )
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
