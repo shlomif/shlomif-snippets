@@ -11,6 +11,32 @@ import numpy as np
 
 r_width, i_height = 640, 640
 
+# Taken from https://github.com/akkana/gimp-plugins/blob/master/gimp3/saver.py
+# under GPL v2
+GPLED_BOILERPLATE = \
+                 '''
+
+def run_pdb(procname, argdict):
+    pdb = Gimp.get_pdb()
+    pdb_proc = pdb.lookup_procedure(procname)
+    pdb_config = pdb_proc.create_config()
+    for argname in argdict:
+        pdb_config.set_property(argname, argdict[argname])
+    vals = pdb_proc.run(pdb_config)
+    # Convert to an iterable list
+    return [ vals.index(i) for i in range(vals.length()) ]
+
+
+def gimp_file_save(image, layers, filepath):
+    "A PDB helper. Returns a Gimp.PDBStatusType"
+    return run_pdb('gimp-file-save', {
+        'run-mode':      Gimp.RunMode.NONINTERACTIVE,
+        'image':         image,
+        'file':          Gio.File.new_for_path(filepath)
+        })
+
+'''
+
 
 # Assign some default values to the parameters
 def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255):
@@ -158,22 +184,41 @@ def main():
         [
             "gimp",  greyscale_bmp,
             # "gimp-2.99",  greyscale_fn,
+            "--quit",
             "--no-interface",
             "--batch-interpreter=python-fu-eval",
             "-b",
-            ('img = gimp.image_list()[0]\n' +
-             'draw=img.active_drawable\n' +
-             'pdb.gimp_context_set_gradient("{gradient}")\n' +
-             'pdb.plug_in_gradmap(img, draw)\n' +
-             'pdb.gimp_file_save(\n' +
-             '    img, draw, "{colored_fn}", "{colored_fn}")\n' +
-             'pdb.gimp_quit(1)\n'
+            ('import gi\n'
+             'gi.require_version("Gimp", "3.0")\n'
+             'from gi.repository import Gimp\n' +
+             '{boilerplate}\n' +
+             'img = Gimp.get_images()[0]\n' +
+             'layers = img.get_layers()\n'
+             'assert(len(layers) == 1)\n' +
+             'draw = layers[0]\n' +
+             'gradient = Gimp.Gradient.get_by_name("{gradient}")\n'
+             'Gimp.context_set_gradient(gradient)\n' +
+             'pdb_proc = Gimp.get_pdb().'
+             'lookup_procedure("plug-in-gradmap")\n' +
+             'pdb_config = pdb_proc.create_config()\n' +
+             'pdb_config.set_property("run-mode",'
+             'Gimp.RunMode.NONINTERACTIVE)\n' +
+             'pdb_config.set_property("image", img)\n' +
+             'pdb_config.set_property("num-drawables", 1)\n' +
+             'pdb_config.set_property("drawables",' +
+             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False))\n' +
+             'result = pdb_proc.run(pdb_config)\n'
+             'gimp_file_save(\n' +
+             '    img, draw, "{colored_fn}")\n' +
+             '# Gimp.get_pdb().gimp_quit(1)\n'
              ).format(
+                 boilerplate=GPLED_BOILERPLATE,
                  colored_fn=colored_fn,
                  gradient=gradient,
              )
         ]
     )
+    # raise "gimp was invoked"
 
     subprocess.check_call(["gwenview", colored_fn])
 
