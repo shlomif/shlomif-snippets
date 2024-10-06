@@ -28,7 +28,7 @@ def run_pdb(procname, argdict):
 
 
 def gimp_file_save(image, layers, filepath):
-    "A PDB helper. Returns a Gimp.PDBStatusType"
+    """A PDB helper. Returns a Gimp.PDBStatusType"""
     return run_pdb('gimp-file-save', {
         'run-mode':      Gimp.RunMode.NONINTERACTIVE,
         'image':         image,
