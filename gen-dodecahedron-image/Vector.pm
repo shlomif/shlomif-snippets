@@ -7,12 +7,12 @@ use warnings;
 
 use overload '+' => sub {
     my @coords;
-    my ($v1, $v2) = @_;
+    my ( $v1, $v2 ) = @_;
     my $c1 = $v1->{coords};
     my $c2 = $v2->{coords};
-    for my $pos (0 .. 2)
+    for my $pos ( 0 .. 2 )
     {
-        push @coords, $c1->[$pos] +$c2->[$pos];
+        push @coords, $c1->[$pos] + $c2->[$pos];
     }
     return Vector->new(@coords);
     },
@@ -23,12 +23,12 @@ use overload '+' => sub {
     }
     elsif ( ref( $_[1] ) eq 'Vector' )
     {
-        my @a = @{ $_[0]->{coords} };
-        my @b = @{ $_[1]->{coords} };
-        return new Vector(
-            $a[1] * $b[2] - $a[2] * $b[1],
-            $a[2] * $b[0] - $a[0] * $b[2],
-            $a[0] * $b[1] - $a[1] * $b[0]
+        my @x = @{ $_[0]->{coords} };
+        my @y = @{ $_[1]->{coords} };
+        return Vector->new(
+            $x[1] * $y[2] - $x[2] * $y[1],
+            $x[2] * $y[0] - $x[0] * $y[2],
+            $x[0] * $y[1] - $x[1] * $y[0]
         );
     }
     else
