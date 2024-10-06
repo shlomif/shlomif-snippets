@@ -1,7 +1,8 @@
 # mandel - a function to generate the Mandelbrot Set.
 # Written by Shlomi Fish, 2001
 #
-# This file is under the CC0 / public domain.
+# This file is under the CC0 / public domain, except for GPLED_BOILERPLATE ,
+# which is under GPLv2-or-later
 
 import subprocess
 
@@ -12,7 +13,7 @@ import numpy as np
 r_width, i_height = 640, 640
 
 # Taken from https://github.com/akkana/gimp-plugins/blob/master/gimp3/saver.py
-# under GPL v2
+# under GPL v2-or-later
 GPLED_BOILERPLATE = \
                  '''
 
