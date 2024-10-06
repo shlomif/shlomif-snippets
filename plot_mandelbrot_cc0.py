@@ -190,26 +190,26 @@ def main():
             "-b",
             ('import gi\n'
              'gi.require_version("Gimp", "3.0")\n'
-             'from gi.repository import Gimp\n' +
-             '{boilerplate}\n' +
-             'img = Gimp.get_images()[0]\n' +
+             'from gi.repository import Gimp\n'
+             '{boilerplate}\n'
+             'img = Gimp.get_images()[0]\n'
              'layers = img.get_layers()\n'
-             'assert(len(layers) == 1)\n' +
-             'draw = layers[0]\n' +
+             'assert(len(layers) == 1)\n'
+             'draw = layers[0]\n'
              'gradient = Gimp.Gradient.get_by_name("{gradient}")\n'
-             'Gimp.context_set_gradient(gradient)\n' +
+             'Gimp.context_set_gradient(gradient)\n'
              'pdb_proc = Gimp.get_pdb().'
-             'lookup_procedure("plug-in-gradmap")\n' +
-             'pdb_config = pdb_proc.create_config()\n' +
+             'lookup_procedure("plug-in-gradmap")\n'
+             'pdb_config = pdb_proc.create_config()\n'
              'pdb_config.set_property("run-mode",'
-             'Gimp.RunMode.NONINTERACTIVE)\n' +
-             'pdb_config.set_property("image", img)\n' +
-             'pdb_config.set_property("num-drawables", 1)\n' +
-             'pdb_config.set_property("drawables",' +
-             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False))\n' +
+             'Gimp.RunMode.NONINTERACTIVE)\n'
+             'pdb_config.set_property("image", img)\n'
+             'pdb_config.set_property("num-drawables", 1)\n'
+             'pdb_config.set_property("drawables",'
+             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False))\n'
              'result = pdb_proc.run(pdb_config)\n'
-             'gimp_file_save(\n' +
-             '    img, draw, "{colored_fn}")\n' +
+             'gimp_file_save(\n'
+             '    img, draw, "{colored_fn}")\n'
              '# Gimp.get_pdb().gimp_quit(1)\n'
              ).format(
                  boilerplate=GPLED_BOILERPLATE,
