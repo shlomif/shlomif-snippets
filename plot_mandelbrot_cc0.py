@@ -171,6 +171,14 @@ def _shf_run_pdb(pdb, name, kv):
     result = pdb_proc.run(pdb_config)
     arr = [result.index(i) for i in range(result.length())]
     return arr
+
+def _shf_file_save(pdb, img, filepath):
+    result = _shf_run_pdb(pdb, "gimp-file-save", {
+    "file": Gio.File.new_for_path(filepath),
+    "image": img,
+    "run-mode": Gimp.RunMode.NONINTERACTIVE,
+    })
+    return result
 '''
 
 
@@ -222,8 +230,8 @@ def main():
              '"num-drawables": 1,\n'
              '"run-mode": Gimp.RunMode.NONINTERACTIVE,\n'
              '}})\n'
-             'gimp_file_save(\n'
-             '    img, draw, "{colored_fn}")\n'
+             '_shf_file_save(\n'
+             '    pdb, img, "{colored_fn}")\n'
              '# Gimp.get_pdb().gimp_quit(1)\n'
              ).format(
                  boilerplate=GPLED_BOILERPLATE,
