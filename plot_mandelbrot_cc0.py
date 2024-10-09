@@ -12,31 +12,8 @@ import numpy as np
 
 r_width, i_height = 640, 640
 
-# Taken from https://github.com/akkana/gimp-plugins/blob/master/gimp3/saver.py
-# under GPL v2-or-later
-GPLED_BOILERPLATE = \
-                 '''
-
-def run_pdb(procname, argdict):
-    pdb = Gimp.get_pdb()
-    pdb_proc = pdb.lookup_procedure(procname)
-    pdb_config = pdb_proc.create_config()
-    for argname in argdict:
-        pdb_config.set_property(argname, argdict[argname])
-    vals = pdb_proc.run(pdb_config)
-    # Convert to an iterable list
-    return [ vals.index(i) for i in range(vals.length()) ]
-
-
-def gimp_file_save(image, layers, filepath):
-    """A PDB helper. Returns a Gimp.PDBStatusType"""
-    return run_pdb('gimp-file-save', {
-        'run-mode':      Gimp.RunMode.NONINTERACTIVE,
-        'image':         image,
-        'file':          Gio.File.new_for_path(filepath)
-        })
-
-'''
+# inspired by https://github.com/akkana/gimp-plugins/blob/master/gimp3/saver.py
+# thanks
 
 
 # Assign some default values to the parameters
@@ -212,7 +189,6 @@ def main():
             ('import gi\n'
              'gi.require_version("Gimp", "3.0")\n'
              'from gi.repository import Gimp\n'
-             '{boilerplate}\n'
              '{pd_boilerplate}\n'
              'images = Gimp.get_images()\n'
              'assert(len(images) == 1)\n'
@@ -234,7 +210,6 @@ def main():
              '    pdb, img, "{colored_fn}")\n'
              '# Gimp.get_pdb().gimp_quit(1)\n'
              ).format(
-                 boilerplate=GPLED_BOILERPLATE,
                  colored_fn=colored_fn,
                  gradient=gradient,
                  pd_boilerplate=BOILER,
