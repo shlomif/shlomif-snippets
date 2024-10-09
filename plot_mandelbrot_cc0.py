@@ -190,13 +190,16 @@ import gi
 gi.require_version("Gimp", "3.0")
 from gi.repository import Gimp
 {GIMP_WRAPPER_FUNCS}
+gradient_name = "{gradient}"
+colored_fn = "{colored_fn}"
+
 images = Gimp.get_images()
 assert(len(images) == 1)
 img = images[0]
 layers = img.get_layers()
 assert(len(layers) == 1)
 draw = layers[0]
-gradient = Gimp.Gradient.get_by_name("{gradient}")
+gradient = Gimp.Gradient.get_by_name(gradient_name)
 Gimp.context_set_gradient(gradient)
 pdb = Gimp.get_pdb()
 result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{
@@ -207,7 +210,7 @@ Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),
 "run-mode": Gimp.RunMode.NONINTERACTIVE,
 }})
 gimp_wrap_file_save(
-    pdb, img, "{colored_fn}")
+    pdb, img, colored_fn)
 # Gimp.get_pdb().gimp_quit(1)
 ''').format(
                  colored_fn=colored_fn,
