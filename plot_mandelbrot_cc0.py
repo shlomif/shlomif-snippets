@@ -162,6 +162,18 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
     return ret
 
 
+BOILER = '''
+def _shf_run_pdb(pdb, name, kv):
+    pdb_proc = pdb.lookup_procedure(name)
+    pdb_config = pdb_proc.create_config()
+    for k, v in kv.items():
+        pdb_config.set_property(k, v)
+    result = pdb_proc.run(pdb_config)
+    arr = [result.index(i) for i in range(result.length())]
+    return arr
+'''
+
+
 def main():
     # mandelbrot_set = mandel(max_level=255, num_steps=255)
     mandelbrot_set = int_mandel(max_level=255, num_steps=255)
@@ -193,6 +205,7 @@ def main():
              'gi.require_version("Gimp", "3.0")\n'
              'from gi.repository import Gimp\n'
              '{boilerplate}\n'
+             '{pd_boilerplate}\n'
              'images = Gimp.get_images()\n'
              'assert(len(images) == 1)\n'
              'img = images[0]\n'
@@ -201,16 +214,14 @@ def main():
              'draw = layers[0]\n'
              'gradient = Gimp.Gradient.get_by_name("{gradient}")\n'
              'Gimp.context_set_gradient(gradient)\n'
-             'pdb_proc = Gimp.get_pdb().'
-             'lookup_procedure("plug-in-gradmap")\n'
-             'pdb_config = pdb_proc.create_config()\n'
-             'pdb_config.set_property("run-mode",'
-             'Gimp.RunMode.NONINTERACTIVE)\n'
-             'pdb_config.set_property("image", img)\n'
-             'pdb_config.set_property("num-drawables", 1)\n'
-             'pdb_config.set_property("drawables",'
-             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False))\n'
-             'result = pdb_proc.run(pdb_config)\n'
+             'pdb = Gimp.get_pdb()\n'
+             'result = _shf_run_pdb(pdb, "plug-in-gradmap", {{'
+             '"drawables":'
+             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),\n'
+             '"image": img,\n'
+             '"num-drawables": 1,\n'
+             '"run-mode": Gimp.RunMode.NONINTERACTIVE,\n'
+             '}})\n'
              'gimp_file_save(\n'
              '    img, draw, "{colored_fn}")\n'
              '# Gimp.get_pdb().gimp_quit(1)\n'
@@ -218,6 +229,7 @@ def main():
                  boilerplate=GPLED_BOILERPLATE,
                  colored_fn=colored_fn,
                  gradient=gradient,
+                 pd_boilerplate=BOILER,
              )
         ]
     )
