@@ -1,8 +1,7 @@
 # mandel - a function to generate the Mandelbrot Set.
 # Written by Shlomi Fish, 2001
 #
-# This file is under the CC0 / public domain, except for GPLED_BOILERPLATE ,
-# which is under GPLv2-or-later
+# This file is under the CC0 / public domain.
 
 import subprocess
 
@@ -139,7 +138,7 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
     return ret
 
 
-BOILER = '''
+GIMP_WRAPPER_FUNCS = '''
 def gimp_wrap_run_pdb(pdb, name, kv):
     pdb_proc = pdb.lookup_procedure(name)
     pdb_config = pdb_proc.create_config()
@@ -189,7 +188,7 @@ def main():
             ('import gi\n'
              'gi.require_version("Gimp", "3.0")\n'
              'from gi.repository import Gimp\n'
-             '{pd_boilerplate}\n'
+             '{GIMP_WRAPPER_FUNCS}\n'
              'images = Gimp.get_images()\n'
              'assert(len(images) == 1)\n'
              'img = images[0]\n'
@@ -212,7 +211,7 @@ def main():
              ).format(
                  colored_fn=colored_fn,
                  gradient=gradient,
-                 pd_boilerplate=BOILER,
+                 GIMP_WRAPPER_FUNCS=GIMP_WRAPPER_FUNCS,
              )
         ]
     )
