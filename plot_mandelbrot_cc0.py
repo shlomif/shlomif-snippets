@@ -185,30 +185,31 @@ def main():
             "--no-interface",
             "--batch-interpreter=python-fu-eval",
             "-b",
-            ('import gi\n'
-             'gi.require_version("Gimp", "3.0")\n'
-             'from gi.repository import Gimp\n'
-             '{GIMP_WRAPPER_FUNCS}\n'
-             'images = Gimp.get_images()\n'
-             'assert(len(images) == 1)\n'
-             'img = images[0]\n'
-             'layers = img.get_layers()\n'
-             'assert(len(layers) == 1)\n'
-             'draw = layers[0]\n'
-             'gradient = Gimp.Gradient.get_by_name("{gradient}")\n'
-             'Gimp.context_set_gradient(gradient)\n'
-             'pdb = Gimp.get_pdb()\n'
-             'result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{'
-             '"drawables":'
-             'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),\n'
-             '"image": img,\n'
-             '"num-drawables": 1,\n'
-             '"run-mode": Gimp.RunMode.NONINTERACTIVE,\n'
-             '}})\n'
-             'gimp_wrap_file_save(\n'
-             '    pdb, img, "{colored_fn}")\n'
-             '# Gimp.get_pdb().gimp_quit(1)\n'
-             ).format(
+            ('''
+import gi
+gi.require_version("Gimp", "3.0")
+from gi.repository import Gimp
+{GIMP_WRAPPER_FUNCS}
+images = Gimp.get_images()
+assert(len(images) == 1)
+img = images[0]
+layers = img.get_layers()
+assert(len(layers) == 1)
+draw = layers[0]
+gradient = Gimp.Gradient.get_by_name("{gradient}")
+Gimp.context_set_gradient(gradient)
+pdb = Gimp.get_pdb()
+result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{
+"drawables":
+Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),
+"image": img,
+"num-drawables": 1,
+"run-mode": Gimp.RunMode.NONINTERACTIVE,
+}})
+gimp_wrap_file_save(
+    pdb, img, "{colored_fn}")
+# Gimp.get_pdb().gimp_quit(1)
+''').format(
                  colored_fn=colored_fn,
                  gradient=gradient,
                  GIMP_WRAPPER_FUNCS=GIMP_WRAPPER_FUNCS,
