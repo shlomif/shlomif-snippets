@@ -140,7 +140,7 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
 
 
 BOILER = '''
-def _shf_run_pdb(pdb, name, kv):
+def gimp_wrap_run_pdb(pdb, name, kv):
     pdb_proc = pdb.lookup_procedure(name)
     pdb_config = pdb_proc.create_config()
     for k, v in kv.items():
@@ -149,8 +149,8 @@ def _shf_run_pdb(pdb, name, kv):
     arr = [result.index(i) for i in range(result.length())]
     return arr
 
-def _shf_file_save(pdb, img, filepath):
-    result = _shf_run_pdb(pdb, "gimp-file-save", {
+def gimp_wrap_file_save(pdb, img, filepath):
+    result = gimp_wrap_run_pdb(pdb, "gimp-file-save", {
     "file": Gio.File.new_for_path(filepath),
     "image": img,
     "run-mode": Gimp.RunMode.NONINTERACTIVE,
@@ -199,14 +199,14 @@ def main():
              'gradient = Gimp.Gradient.get_by_name("{gradient}")\n'
              'Gimp.context_set_gradient(gradient)\n'
              'pdb = Gimp.get_pdb()\n'
-             'result = _shf_run_pdb(pdb, "plug-in-gradmap", {{'
+             'result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{'
              '"drawables":'
              'Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),\n'
              '"image": img,\n'
              '"num-drawables": 1,\n'
              '"run-mode": Gimp.RunMode.NONINTERACTIVE,\n'
              '}})\n'
-             '_shf_file_save(\n'
+             'gimp_wrap_file_save(\n'
              '    pdb, img, "{colored_fn}")\n'
              '# Gimp.get_pdb().gimp_quit(1)\n'
              ).format(
