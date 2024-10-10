@@ -139,6 +139,11 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
 
 
 GIMP_WRAPPER_FUNCS = '''
+import gi
+gi.require_version("Gimp", "3.0")
+from gi.repository import Gimp
+pdb = Gimp.get_pdb()
+
 def gimp_wrap_run_pdb(pdb, name, kv):
     pdb_proc = pdb.lookup_procedure(name)
     pdb_config = pdb_proc.create_config()
@@ -191,9 +196,6 @@ def main():
             "--batch-interpreter=python-fu-eval",
             "-b",
             ('''
-import gi
-gi.require_version("Gimp", "3.0")
-from gi.repository import Gimp
 {GIMP_WRAPPER_FUNCS}
 gradient_name = "{gradient}"
 colored_fn = "{colored_fn}"
@@ -204,7 +206,6 @@ layers = img.get_layers()
 draw = _only1(layers)
 gradient = Gimp.Gradient.get_by_name(gradient_name)
 Gimp.context_set_gradient(gradient)
-pdb = Gimp.get_pdb()
 result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{
 "drawables":
 Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),
