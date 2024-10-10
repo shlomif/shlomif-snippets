@@ -155,6 +155,11 @@ def gimp_wrap_file_save(pdb, img, filepath):
     "run-mode": Gimp.RunMode.NONINTERACTIVE,
     })
     return result
+
+def _only1(lst):
+    assert(len(lst) == 1)
+    ret = lst[0]
+    return ret
 '''
 
 
@@ -194,11 +199,9 @@ gradient_name = "{gradient}"
 colored_fn = "{colored_fn}"
 
 images = Gimp.get_images()
-assert(len(images) == 1)
-img = images[0]
+img = _only1(images)
 layers = img.get_layers()
-assert(len(layers) == 1)
-draw = layers[0]
+draw = _only1(layers)
 gradient = Gimp.Gradient.get_by_name(gradient_name)
 Gimp.context_set_gradient(gradient)
 pdb = Gimp.get_pdb()
