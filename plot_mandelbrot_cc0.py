@@ -148,7 +148,11 @@ def gimp_wrap_run_pdb(pdb, name, kv):
     pdb_proc = pdb.lookup_procedure(name)
     pdb_config = pdb_proc.create_config()
     for k, v in kv.items():
-        pdb_config.set_property(k, v)
+        if isinstance(k, tuple):
+            k = k[1]
+            pdb_config.set_core_object_array(k, v)
+        else:
+            pdb_config.set_property(k, v)
     result = pdb_proc.run(pdb_config)
     arr = [result.index(i) for i in range(result.length())]
     return arr
@@ -207,10 +211,10 @@ draw = _only1(layers)
 gradient = Gimp.Gradient.get_by_name(gradient_name)
 Gimp.context_set_gradient(gradient)
 result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{
-"drawables":
-Gimp.ObjectArray.new(Gimp.Drawable, [draw, ], False),
+(0, "drawables"):
+[draw, ],
 "image": img,
-"num-drawables": 1,
+# "num-drawables": 1,
 "run-mode": Gimp.RunMode.NONINTERACTIVE,
 }})
 gimp_wrap_file_save(
