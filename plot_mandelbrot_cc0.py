@@ -16,9 +16,10 @@ r_width, i_height = 640, 640
 
 
 # Assign some default values to the parameters
-def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255):
-    xx = np.linspace(-2, 2, x)
-    yy = np.linspace(-2, 2, y)
+def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
+           startx=-2.0, endx=2.0, starty=-2.0, endy=2.0):
+    xx = np.linspace(startx, endx, x)
+    yy = np.linspace(starty, endy, y)
     # Generate the coordinates in the complex plane
     Y, X = np.meshgrid(xx, yy, indexing='ij')
     # Combine them into a matrix of complex numbers
@@ -174,8 +175,15 @@ def _only1(lst):
 
 
 def main():
-    # mandelbrot_set = mandel(max_level=255, num_steps=255)
-    mandelbrot_set = int_mandel(max_level=255, num_steps=255)
+    extents = {
+        'startx': -0.5,
+        'endx': 0.5,
+        'starty': -0.5,
+        'endy': 0.5,
+    }
+    mandelbrot_set = mandel(max_level=255, num_steps=255, **extents)
+    mandelbrot_set = mandel(max_level=255, num_steps=255,)
+    # mandelbrot_set = int_mandel(max_level=255, num_steps=255)
     mandelbrot_set = mandelbrot_set.astype('uint8')
     # m = np.repeat(mandelbrot_set, 3, axis=1)
     gradient = "Tropical Colors"
