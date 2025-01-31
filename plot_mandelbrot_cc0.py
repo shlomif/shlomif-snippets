@@ -140,37 +140,6 @@ def int_mandel(x=r_width, y=i_height, num_steps=20,
 
 
 GIMP_WRAPPER_FUNCS = '''
-import gi
-gi.require_version("Gimp", "3.0")
-from gi.repository import Gimp
-pdb = Gimp.get_pdb()
-
-def gimp_wrap_run_pdb(pdb, name, kv):
-    pdb_proc = pdb.lookup_procedure(name)
-    pdb_config = pdb_proc.create_config()
-    for k, v in kv.items():
-        if isinstance(k, tuple):
-            ktype, k = k
-            assert ktype == "array"
-            pdb_config.set_core_object_array(k, v)
-        else:
-            pdb_config.set_property(k, v)
-    result = pdb_proc.run(pdb_config)
-    arr = [result.index(i) for i in range(result.length())]
-    return arr
-
-def gimp_wrap_file_save(pdb, img, filepath):
-    result = gimp_wrap_run_pdb(pdb, "gimp-file-save", {
-    "file": Gio.File.new_for_path(filepath),
-    "image": img,
-    "run-mode": Gimp.RunMode.NONINTERACTIVE,
-    })
-    return result
-
-def _only1(lst):
-    assert(len(lst) == 1)
-    ret = lst[0]
-    return ret
 '''
 
 
@@ -209,29 +178,30 @@ def main():
             "--batch-interpreter=python-fu-eval",
             "-b",
             ('''
-{GIMP_WRAPPER_FUNCS}
+from shlomif_gimp3 import MyGimp , only1
+
+g = MyGimp()
 gradient_name = "{gradient}"
 colored_fn = "{colored_fn}"
 
-images = Gimp.get_images()
-img = _only1(images)
+images = g.Gimp.get_images()
+img = only1(images)
 layers = img.get_layers()
-draw = _only1(layers)
-gradient = Gimp.Gradient.get_by_name(gradient_name)
+draw = only1(layers)
+gradient = g.Gimp.Gradient.get_by_name(gradient_name)
 Gimp.context_set_gradient(gradient)
-result = gimp_wrap_run_pdb(pdb, "plug-in-gradmap", {{
+result = g.run_pdb(pdb, "plug-in-gradmap", {{
 ("array", "drawables"):
 [draw, ],
 "image": img,
-"run-mode": Gimp.RunMode.NONINTERACTIVE,
+"run-mode": g.Gimp.RunMode.NONINTERACTIVE,
 }})
-gimp_wrap_file_save(
-    pdb, img, colored_fn)
+g.file_save(img, colored_fn)
+g.destroy()
 # Gimp.get_pdb().gimp_quit(1)
 ''').format(
                  colored_fn=colored_fn,
                  gradient=gradient,
-                 GIMP_WRAPPER_FUNCS=GIMP_WRAPPER_FUNCS,
              )
         ]
     )
