@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
 # -------------------------------------------------------------------------------------
 #
@@ -66,7 +66,7 @@ def file_load_lepton(filename, raw_filename):
         jpeg_fn = os.path.join(tmp_dirname, "from_lep.jpeg")
         subprocess.check_call(["lepton", filename, jpeg_fn])
         fileImage = pdb.file_jpeg_load(jpeg_fn, filename)
-        if(fileImage is None):
+        if (fileImage is None):
             gimp.message("The image could not be opened since" +
                          "it is not an image file.")
         shutil.rmtree(tmp_dirname)
