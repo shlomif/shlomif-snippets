@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+
+"""
+
+lepton has been fallen out of favour:
+
+https://github.com/dropbox/lepton
+
+"""
+
 #
 # -------------------------------------------------------------------------------------
 #
