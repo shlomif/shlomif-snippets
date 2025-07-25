@@ -12,6 +12,8 @@
 
 import sys
 
+se = set()
+
 
 def ff(a, b):
     res = pow(a, b) % pow(b, a)
@@ -23,7 +25,8 @@ def f(s):
         b = s - a
         assert b >= 1
         res = ff(a, b)
-        print(res)
+        se.add(res)
+#         print(res)
 
 
 def g():
@@ -31,5 +34,8 @@ def g():
     sys.exit()
 
 
-for s in range(2, 1096):
+s = 2
+while True:
     f(s)
+    s += 1
+    print(sorted(se))
