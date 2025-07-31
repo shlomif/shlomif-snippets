@@ -29,13 +29,14 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
-    value = np.ones(zs, dtype=complex) * init_value
+    value = Z
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
     ret = np.zeros(zs, dtype=np.uint)
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
     mask = np.zeros(zs, dtype=bool)
+    a = -0.744 + 0.028j
 
     # Perform the check "num_steps" times
     for step in range(num_steps):
@@ -44,7 +45,7 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
         #
         # * is an element-by-element multiplication of two matrixes
         # of the same size.
-        value = (value * value) + Z
+        value = (value * value) + a
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
