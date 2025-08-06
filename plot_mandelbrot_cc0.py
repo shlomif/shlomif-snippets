@@ -17,7 +17,7 @@ r_width, i_height = 640, 640
 
 # Assign some default values to the parameters
 def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
-           startx=-2.0, endx=2.0, starty=-2.0, endy=2.0):
+           startx=-2.0, endx=2.0, starty=-2.0, endy=2.0, is_julia=False):
     xx = np.linspace(startx, endx, x)
     yy = np.linspace(starty, endy, y)
     # Generate the coordinates in the complex plane
@@ -29,13 +29,22 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
     # The length in the x direction
     # The length in the y direction
     # value is initialized to init_value in every point of the plane
-    value = np.ones(zs, dtype=complex) * init_value
+    if is_julia:
+        value = Z
+    else:
+        value = np.ones(zs, dtype=complex) * init_value
     # In the beginning all points are considered as part of the Mandelbrot
     # set. Thus, they are initialized to zero.
     ret = np.zeros(zs, dtype=np.uint)
     # The mask which indicates which points have already overflowed, is set
     # to zero, to indicate that none have so far.
     mask = np.zeros(zs, dtype=bool)
+    if is_julia:
+        delta = init_value
+    else:
+        delta = Z
+
+    value = np.ones(zs, dtype=complex) * init_value
 
     # Perform the check "num_steps" times
     for step in range(num_steps):
@@ -44,7 +53,7 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
         #
         # * is an element-by-element multiplication of two matrixes
         # of the same size.
-        value = (value * value) + Z
+        value = (value * value) + delta
         # assert value.any()
         # Retrieve the points that overflowed in this iteration
         # An overflowed point has a mandel value with an absolute value greater
