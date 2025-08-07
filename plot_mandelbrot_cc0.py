@@ -44,8 +44,6 @@ def mandel(x=r_width, y=i_height, num_steps=20, init_value=0, max_level=255,
     else:
         delta = Z
 
-    value = np.ones(zs, dtype=complex) * init_value
-
     # Perform the check "num_steps" times
     for step in range(num_steps):
         # For every point with a mandel value of "v" and a coordinate of "z"
@@ -183,15 +181,23 @@ def _only1(lst):
 '''
 
 
+extents = {
+    'startx': -0.5,
+    'endx': 0.5,
+    'starty': -0.5,
+    'endy': 0.5,
+}
+
+
 def main():
-    extents = {
-        'startx': -0.5,
-        'endx': 0.5,
-        'starty': -0.5,
-        'endy': 0.5,
-    }
-    mandelbrot_set = mandel(max_level=255, num_steps=255, **extents)
-    mandelbrot_set = mandel(max_level=255, num_steps=255,)
+    if 1:
+        mandelbrot_set = mandel(max_level=255, num_steps=255)
+    else:
+        mandelbrot_set = mandel(
+            init_value=(0.34-0.2j), is_julia=True,
+            max_level=255, num_steps=1000)
+
+    # mandelbrot_set = mandel(max_level=255, num_steps=255,)
     # mandelbrot_set = int_mandel(max_level=255, num_steps=255)
     mandelbrot_set = mandelbrot_set.astype('uint8')
     # m = np.repeat(mandelbrot_set, 3, axis=1)
